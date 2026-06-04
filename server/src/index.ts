@@ -1,11 +1,9 @@
+import './env';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import esportsRouter from './routes/esports';
 import leagueRouter from './routes/league';
 import matchupsRouter from './routes/matchups';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT ?? 3001;
