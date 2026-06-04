@@ -186,6 +186,8 @@ router.get('/champstats', async (_req: Request, res: Response) => {
     const r = await axios.get<string>(sheetUrl('Champ Stats'), { responseType: 'text' });
     const lines = r.data.split('\n');
     // Row 0 is the header, data starts at row 1
+    const clean = (v: string | undefined) => (!v || v.startsWith('#')) ? '' : v;
+
     const data = lines
       .slice(1)
       .filter(l => l.trim())
@@ -194,21 +196,21 @@ router.get('/champstats', async (_req: Request, res: Response) => {
         const name = cols[2];
         if (!name) return null;
         return {
-          rank:      parseInt(cols[1]) || 0,
+          rank:        parseInt(cols[1]) || 0,
           name,
-          presence:  parseInt(cols[3]) || 0,
-          presencePct: cols[4] ?? '',
-          picks:     parseInt(cols[5]) || 0,
-          bans:      parseInt(cols[6]) || 0,
-          pickPct:   cols[7] ?? '',
-          banPct:    cols[8] ?? '',
-          wins:      parseInt(cols[9]) || 0,
-          losses:    parseInt(cols[10]) || 0,
-          winPct:    cols[11] ?? '',
-          bluePicks: parseInt(cols[12]) || 0,
-          redPicks:  parseInt(cols[13]) || 0,
-          blueBans:  parseInt(cols[14]) || 0,
-          redBans:   parseInt(cols[15]) || 0,
+          presence:    parseInt(cols[3]) || 0,
+          presencePct: clean(cols[4]),
+          picks:       parseInt(cols[5]) || 0,
+          bans:        parseInt(cols[6]) || 0,
+          pickPct:     clean(cols[7]),
+          banPct:      clean(cols[8]),
+          wins:        parseInt(cols[9]) || 0,
+          losses:      parseInt(cols[10]) || 0,
+          winPct:      clean(cols[11]),
+          bluePicks:   parseInt(cols[12]) || 0,
+          redPicks:    parseInt(cols[13]) || 0,
+          blueBans:    parseInt(cols[14]) || 0,
+          redBans:     parseInt(cols[15]) || 0,
         };
       })
       .filter(Boolean);

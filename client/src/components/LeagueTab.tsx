@@ -234,10 +234,8 @@ export default function LeagueTab() {
                   <th>Champion</th>
                   <th>Presence</th>
                   <th>Picks</th>
-                  <th>Pick%</th>
                   <th>Win%</th>
                   <th>Bans</th>
-                  <th>Ban%</th>
                   <th title="Blue side picks">🔵P</th>
                   <th title="Red side picks">🔴P</th>
                 </tr>
@@ -245,7 +243,6 @@ export default function LeagueTab() {
               <tbody>
                 {filteredChamps.map((c) => {
                   const wr = parseFloat(c.winPct);
-                  const presence = parseFloat(c.presencePct);
                   return (
                     <tr key={c.name}>
                       <td className="rank-num">{c.rank}</td>
@@ -255,16 +252,12 @@ export default function LeagueTab() {
                           <span className="champ-cell-name">{c.name}</span>
                         </div>
                       </td>
-                      <td className="stat-cell" style={{ color: presence >= 50 ? '#facc15' : 'var(--text)' }}>
-                        {c.presencePct}
-                      </td>
+                      <td className="stat-cell">{c.picks + c.bans}</td>
                       <td className="stat-cell">{c.picks}</td>
-                      <td className="stat-cell">{c.pickPct}</td>
                       <td className={`stat-cell ${c.picks > 0 ? (wr >= 50 ? 'positive' : 'negative') : ''}`}>
                         {c.picks > 0 ? c.winPct : '—'}
                       </td>
                       <td className="stat-cell">{c.bans}</td>
-                      <td className="stat-cell">{c.banPct}</td>
                       <td className="stat-cell">{c.bluePicks}</td>
                       <td className="stat-cell">{c.redPicks}</td>
                     </tr>
