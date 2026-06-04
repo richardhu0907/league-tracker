@@ -32,6 +32,7 @@ function ChampIcon({ name, size = 28 }: { name: string; size?: number }) {
   if (!name) return <div style={{ width: size, height: size, background: 'var(--surface2)', borderRadius: 4 }} />;
   return (
     <img
+      // strip spaces/apostrophes/dots so name matches DDragon file naming, e.g. "Bel'Veth" → "BelVeth"
       src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${name.replace(/[\s'\.]/g, '')}.png`}
       alt={name}
       style={{ width: size, height: size, borderRadius: 4, objectFit: 'cover' }}
@@ -246,6 +247,7 @@ export default function LeagueTab() {
                       <td className="rank-num">{c.rank}</td>
                       <td>
                         <div className="champ-cell">
+                          {/* strip spaces/apostrophes/dots to match DDragon file naming */}
                           <ChampIcon name={c.name.replace(/[\s'.]/g, '')} size={36} />
                           <span className="champ-cell-name">{c.name}</span>
                         </div>

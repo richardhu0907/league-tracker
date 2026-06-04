@@ -76,6 +76,7 @@ function parseSheet(csv: string) {
     const cols = parseRow(line);
 
     const rawId = cols[C.MATCH_ID];
+    // match IDs look like "NA1_12345" — only rows with this pattern start a new game block
     if (rawId?.match(/^NA\d+_\d+/)) currentMatchId = rawId;
     if (!currentMatchId) continue;
 
@@ -163,6 +164,7 @@ router.get('/champstats', async (_req: Request, res: Response) => {
       .slice(1)
       .filter(l => l.trim())
       .map(line => {
+        // Google Sheets CSV wraps the whole line in quotes — strip the outer quotes then split on internal ","
         const cols = line.trim().replace(/^"/, '').replace(/"$/, '').split('","');
         const name = cols[2];
         if (!name) return null;
@@ -198,9 +200,9 @@ router.get('/players', async (_req: Request, res: Response) => {
     const players = lines
       .slice(1) // skip header
       .map(line => parseRow(line))
-      .filter(cols => cols[2]?.trim().replace(/"/g, '')) // skip blank-name rows
+      .filter(cols => cols[2]?.trim().replace(/"/g, '')) // strip stray quotes then skip rows with no player name
       .map(cols => {
-        const clean = (i: number) => cols[i]?.trim().replace(/^"|"$/g, '') ?? '';
+        const clean = (i: number) => cols[i]?.trim().replace(/^"|"$/g, '') ?? ''; // strip any surrounding quotes left by the CSV parser
         const num   = (i: number) => parseFloat(clean(i)) || 0;
         return {
           name:   clean(2),

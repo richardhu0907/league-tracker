@@ -91,6 +91,7 @@ router.get('/results/:leagueId', async (req: Request, res: Response) => {
       const standings = Array.from(teamMap.values())
         .sort((a, b) => b.w - a.w || a.l - b.l);
 
+      // replace underscores with spaces in tournament slug (e.g. "lcs_2024" → "LCS 2024")
       return { matches, standings, tournament: { name: current.slug.replace(/_/g, ' ').toUpperCase() } };
     });
     res.json(data);
@@ -133,8 +134,10 @@ const GOL_TO_DDRAGON: Record<string, string> = {
 };
 
 function toDDragonId(name: string, imgSrc: string): string {
+  // extract champion filename from gol.gg image path, e.g. "/champions_icon/Azir.png" → "Azir"
   const m = imgSrc.match(/champions_icon\/(.+?)\.png/i);
   if (m) return GOL_TO_DDRAGON[m[1]] ?? m[1];
+  // fallback: strip everything except letters and digits to match DDragon IDs
   return GOL_TO_DDRAGON[name] ?? name.replace(/[^a-zA-Z0-9]/g, '');
 }
 

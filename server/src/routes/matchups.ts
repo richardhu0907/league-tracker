@@ -11,6 +11,7 @@ const DDRAGON_OVERRIDES: Record<string, string> = {
 
 function toSlug(ddId: string): string {
   const lower = ddId.toLowerCase();
+  // strip anything that isn't a lowercase letter to match lolalytics URL slugs (e.g. "Kai'Sa" → "kaisa")
   return DDRAGON_OVERRIDES[lower] ?? lower.replace(/[^a-z]/g, '');
 }
 
@@ -28,18 +29,19 @@ router.get('/:champion', async (req: Request, res: Response) => {
       { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }, timeout: 10000 }
     );
 
-    // Each matchup card: text-center win-rate div → opponent alt → N Games
+    // matches each counter card in the HTML: captures (1) win rate, (2) opponent name, (3) game count
+    // looks for a win-rate percentage in a text-center div, then the opponent's img alt, then "N Games"
     const re = /class="text-center[^"]*"[^>]*><!--t=\w+-->([\d.]+)<!---->%[\s\S]*?alt="([^"]+)" data-id=""[\s\S]*?([\d,]+) Games/g;
     const matchups: { opponent: string; opponentSlug: string; winRate: number; games: number }[] = [];
     let m: RegExpExecArray | null;
 
     while ((m = re.exec(html)) !== null) {
-      const games = parseInt(m[3].replace(/,/g, ''));
+      const games = parseInt(m[3].replace(/,/g, '')); // remove thousands commas before parsing
       if (games < 1000) continue;
       const opponent = m[2];
       matchups.push({
         opponent,
-        opponentSlug: opponent.toLowerCase().replace(/[^a-z]/g, ''),
+        opponentSlug: opponent.toLowerCase().replace(/[^a-z]/g, ''), // strip non-letters for lolalytics image URL
         winRate: parseFloat(m[1]),
         games,
       });
