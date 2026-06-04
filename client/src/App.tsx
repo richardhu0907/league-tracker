@@ -25,10 +25,10 @@ function App() {
           Draft
         </button>
         <button className={`tab-btn ${tab === 'esports' ? 'active' : ''}`} onClick={() => setTab('esports')}>
-          Pro Scene
+          Pro
         </button>
         <button className={`tab-btn ${tab === 'league' ? 'active' : ''}`} onClick={() => setTab('league')}>
-          Aegis
+          Leagues
         </button>
       </nav>
 
