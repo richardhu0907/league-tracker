@@ -11,8 +11,6 @@ export interface Summoner {
 
 export interface Participant {
   puuid: string;
-  riotIdGameName: string;
-  riotIdTagline: string;
   championName: string;
   kills: number;
   deaths: number;
@@ -28,7 +26,6 @@ export interface Participant {
   item4: number;
   item5: number;
   item6: number;
-  teamId: number;
   teamPosition: string;
 }
 
