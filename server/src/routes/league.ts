@@ -31,16 +31,6 @@ const C = {
   DATE: 40,
   BAN: 84,
   SIDE: 109,
-  SS1: 110,
-  SS2: 111,
-  RUNES_MAIN: 112,
-  ITEM1: 47,
-  ITEM2: 48,
-  ITEM3: 49,
-  ITEM4: 50,
-  ITEM5: 51,
-  ITEM6: 52,
-  ITEM7: 53,
 };
 
 function parseRow(line: string): string[] {
@@ -49,23 +39,11 @@ function parseRow(line: string): string[] {
   return s.split(',');
 }
 
-function parseKDA(raw: string): { k: number; d: number; a: number } {
-  const parts = raw.split('/').map(p => parseInt(p.trim()) || 0);
-  return { k: parts[0] ?? 0, d: parts[1] ?? 0, a: parts[2] ?? 0 };
-}
-
 interface Player {
   name: string;
   champion: string;
   lane: string;
   kda: string;
-  k: number;
-  d: number;
-  a: number;
-  items: string[];
-  ss1: string;
-  ss2: string;
-  runesMain: string;
 }
 
 interface TeamData {
@@ -124,18 +102,11 @@ function parseSheet(csv: string) {
         side.won = cols[C.RESULT] === 'Victory';
       }
 
-      const kda = parseKDA(cols[C.KDA]);
       side.players.push({
         name: cols[C.PLAYER] ?? '',
         champion: cols[C.CHAMPION] ?? '',
         lane: cols[C.LANE] ?? '',
         kda: cols[C.KDA] ?? '',
-        ...kda,
-        items: [C.ITEM1, C.ITEM2, C.ITEM3, C.ITEM4, C.ITEM5, C.ITEM6, C.ITEM7]
-          .map(i => cols[i] ?? '').filter(Boolean),
-        ss1: cols[C.SS1] ?? '',
-        ss2: cols[C.SS2] ?? '',
-        runesMain: cols[C.RUNES_MAIN] ?? '',
       });
 
       const ban = cols[C.BAN];
@@ -196,21 +167,15 @@ router.get('/champstats', async (_req: Request, res: Response) => {
         const name = cols[2];
         if (!name) return null;
         return {
-          rank:        parseInt(cols[1]) || 0,
+          rank:      parseInt(cols[1]) || 0,
           name,
-          presence:    parseInt(cols[3]) || 0,
-          presencePct: clean(cols[4]),
-          picks:       parseInt(cols[5]) || 0,
-          bans:        parseInt(cols[6]) || 0,
-          pickPct:     clean(cols[7]),
-          banPct:      clean(cols[8]),
-          wins:        parseInt(cols[9]) || 0,
-          losses:      parseInt(cols[10]) || 0,
-          winPct:      clean(cols[11]),
-          bluePicks:   parseInt(cols[12]) || 0,
-          redPicks:    parseInt(cols[13]) || 0,
-          blueBans:    parseInt(cols[14]) || 0,
-          redBans:     parseInt(cols[15]) || 0,
+          picks:     parseInt(cols[5]) || 0,
+          bans:      parseInt(cols[6]) || 0,
+          wins:      parseInt(cols[9]) || 0,
+          losses:    parseInt(cols[10]) || 0,
+          winPct:    clean(cols[11]),
+          bluePicks: parseInt(cols[12]) || 0,
+          redPicks:  parseInt(cols[13]) || 0,
         };
       })
       .filter(Boolean);

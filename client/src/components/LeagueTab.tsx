@@ -6,20 +6,15 @@ const BASE = 'http://localhost:3001/api/league';
 
 interface Player {
   name: string; champion: string; lane: string; kda: string;
-  k: number; d: number; a: number; items: string[];
-  ss1: string; ss2: string; runesMain: string;
 }
 interface TeamData { name: string; won: boolean; players: Player[]; bans: string[]; }
 interface Match { matchId: string; date: string; blue: TeamData; red: TeamData; }
 interface Standing { name: string; w: number; l: number; }
 interface ChampStat {
   rank: number; name: string;
-  presence: number; presencePct: string;
   picks: number; bans: number;
-  pickPct: string; banPct: string;
   wins: number; losses: number; winPct: string;
   bluePicks: number; redPicks: number;
-  blueBans: number; redBans: number;
 }
 interface LeagueData {
   totalGames: number; matches: Match[]; standings: Standing[];
@@ -243,6 +238,9 @@ export default function LeagueTab() {
               <tbody>
                 {filteredChamps.map((c) => {
                   const wr = parseFloat(c.winPct);
+                  const presencePct = data.totalGames > 0
+                    ? ((c.picks + c.bans) / data.totalGames * 100).toFixed(1) + '%'
+                    : '—';
                   return (
                     <tr key={c.name}>
                       <td className="rank-num">{c.rank}</td>
@@ -252,7 +250,9 @@ export default function LeagueTab() {
                           <span className="champ-cell-name">{c.name}</span>
                         </div>
                       </td>
-                      <td className="stat-cell">{c.picks + c.bans}</td>
+                      <td className="stat-cell" style={{ color: (c.picks + c.bans) / data.totalGames >= 0.5 ? '#facc15' : 'var(--text)' }}>
+                        {presencePct}
+                      </td>
                       <td className="stat-cell">{c.picks}</td>
                       <td className={`stat-cell ${c.picks > 0 ? (wr >= 50 ? 'positive' : 'negative') : ''}`}>
                         {c.picks > 0 ? c.winPct : '—'}
