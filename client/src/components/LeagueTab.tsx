@@ -26,7 +26,7 @@ interface LeagueData {
 }
 interface PlayerStat {
   name: string; team: string; role: string;
-  score: number; rating: number;
+  wins: number; losses: number; rating: number;
   kg: number; dg: number; ag: number; kdag: number; csg: number;
 }
 
@@ -303,7 +303,7 @@ export default function LeagueTab() {
                   <th>Player</th>
                   <th>Team</th>
                   <th>Role</th>
-                  <th>Score</th>
+                  <th>W-L</th>
                   <th>Rating</th>
                   <th>K/g</th>
                   <th>D/g</th>
@@ -322,7 +322,7 @@ export default function LeagueTab() {
                     </td>
                     <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{p.team}</td>
                     <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{p.role}</td>
-                    <td className="stat-cell">{p.score}</td>
+                    <td className="stat-cell">{p.wins}-{p.losses}</td>
                     <td className="stat-cell" style={{ color: p.rating >= 50 ? 'var(--win)' : 'var(--text)' }}>{p.rating.toFixed(2)}</td>
                     <td className="stat-cell">{p.kg.toFixed(1)}</td>
                     <td className="stat-cell">{p.dg.toFixed(1)}</td>
