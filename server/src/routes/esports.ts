@@ -12,7 +12,8 @@ const cache = new Map<string, { data: unknown; ts: number }>();
 
 async function cached<T>(key: string, fn: () => Promise<T>, ttl = 5 * 60 * 1000): Promise<T> {
   const hit = cache.get(key);
-  if (hit && Date.now() - hit.ts < ttl) return hit.data as T;
+  if (hit && Date.now() - hit.ts < ttl)
+    return hit.data as T;
   const data = await fn();
   cache.set(key, { data, ts: Date.now() });
   return data;
@@ -182,12 +183,12 @@ router.get('/champstats/:leagueId', async (_req: Request, res: Response) => {
         const id = toDDragonId(name, img.attr('src') ?? '');
         champions.push({
           name, id,
-          picks:     parseInt(tds.eq(1).text().trim()) || 0,
-          bans:      parseInt(tds.eq(2).text().trim()) || 0,
+          picks: parseInt(tds.eq(1).text().trim()) || 0,
+          bans: parseInt(tds.eq(2).text().trim()) || 0,
           prioScore: tds.eq(3).text().trim(),
-          wins:      parseInt(tds.eq(4).text().trim()) || 0,
-          losses:    parseInt(tds.eq(5).text().trim()) || 0,
-          winRate:   tds.eq(6).text().trim(),
+          wins: parseInt(tds.eq(4).text().trim()) || 0,
+          losses: parseInt(tds.eq(5).text().trim()) || 0,
+          winRate: tds.eq(6).text().trim(),
         });
       });
 
