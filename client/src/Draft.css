@@ -257,12 +257,16 @@
 .champion-grid {
   flex: 1;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
   gap: 4px;
   padding: 0.6rem;
   align-content: start;
 }
+
+.champion-grid::-webkit-scrollbar { display: none; }
 
 .champ-btn {
   background: var(--surface2);
