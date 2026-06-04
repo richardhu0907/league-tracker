@@ -2,22 +2,15 @@ import { Router, Request, Response } from 'express';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import logger from '../logger';
+import { cached } from '../cache';
 
 const router = Router();
 const KEY = process.env.LOLESPORTS_API_KEY ?? '';
 const BASE = 'https://esports-api.lolesports.com/persisted/gw';
 const H = { 'x-api-key': KEY };
 
-const cache = new Map<string, { data: unknown; ts: number }>();
-
-async function cached<T>(key: string, fn: () => Promise<T>, ttl = 5 * 60 * 1000): Promise<T> {
-  const hit = cache.get(key);
-  if (hit && Date.now() - hit.ts < ttl)
-    return hit.data as T;
-  const data = await fn();
-  cache.set(key, { data, ts: Date.now() });
-  return data;
-}
+const TTL_LIVE    = 5  * 60 * 1000; // live match data — refresh every 5 min
+const TTL_SCRAPE  = 30 * 60 * 1000; // gol.gg scrape — refresh every 30 min
 
 
 const FEATURED = ['worlds', 'msi', 'first_stand', 'lcs', 'lec', 'lck', 'lpl', 'lcp', 'cblol-brazil'];
@@ -31,7 +24,7 @@ router.get('/leagues', async (_req: Request, res: Response) => {
         .filter((l: any) => FEATURED.includes(l.slug))
         .sort((a: any, b: any) => FEATURED.indexOf(a.slug) - FEATURED.indexOf(b.slug))
         .map((l: any) => ({ id: l.id, slug: l.slug, name: l.name, region: l.region, image: l.image }));
-    });
+    }, TTL_LIVE);
     res.json(data);
   } catch (err) {
     logger.error(`GET /leagues failed: ${err}`);
@@ -96,7 +89,7 @@ router.get('/results/:leagueId', async (req: Request, res: Response) => {
 
       // replace underscores with spaces in tournament slug (e.g. "lcs_2024" → "LCS 2024")
       return { matches, standings, tournament: { name: current.slug.replace(/_/g, ' ').toUpperCase() } };
-    });
+    }, TTL_LIVE);
     res.json(data);
   } catch (err: any) {
     res.status(500).json({ error: err.message ?? 'Failed to fetch results' });
@@ -123,7 +116,7 @@ router.get('/upcoming/:leagueId', async (req: Request, res: Response) => {
             name: t.name, code: t.code, image: t.image,
           })),
         }));
-    });
+    }, TTL_LIVE);
     res.json(data);
   } catch (err) {
     logger.error(`GET /upcoming failed: ${err}`);
@@ -193,7 +186,7 @@ router.get('/champstats/:leagueId', async (_req: Request, res: Response) => {
       });
 
       return { season, split, data: champions };
-    }, 30 * 60 * 1000);
+    }, TTL_SCRAPE);
 
     res.json(data);
   } catch (err: any) {

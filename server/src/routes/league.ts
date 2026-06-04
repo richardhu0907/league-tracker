@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import axios from 'axios';
 import logger from '../logger';
+import { cached } from '../cache';
 
 const router = Router();
 
@@ -8,17 +9,7 @@ const SHEET_ID = '1ubW0_OVMK-G7ltSk2RDljYEiy038lq1P-TMYIhhrAQM';
 const sheetUrl = (sheet: string) =>
   `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}`;
 
-const CACHE_MS = 15 * 60 * 1000;
-const caches = new Map<string, { data: unknown; ts: number }>();
-
-function getCache<T>(key: string): T | null {
-  const hit = caches.get(key);
-  if (hit && Date.now() - hit.ts < CACHE_MS) return hit.data as T;
-  return null;
-}
-function setCache(key: string, data: unknown) {
-  caches.set(key, { data, ts: Date.now() });
-}
+const TTL = 15 * 60 * 1000; // Google Sheets is manually updated — refresh every 15 min
 
 // Columns in the Match History sheet (0-indexed)
 const C = {
@@ -139,12 +130,11 @@ function parseSheet(csv: string) {
 
 // GET /api/league/overview — match history + standings
 router.get('/overview', async (_req: Request, res: Response) => {
-  const cached = getCache<unknown>('overview');
-  if (cached) { res.json(cached); return; }
   try {
-    const r = await axios.get<string>(sheetUrl('Match History'), { responseType: 'text' });
-    const data = parseSheet(r.data);
-    setCache('overview', data);
+    const data = await cached('overview', async () => {
+      const r = await axios.get<string>(sheetUrl('Match History'), { responseType: 'text' });
+      return parseSheet(r.data);
+    }, TTL);
     res.json(data);
   } catch (err) {
     logger.error(`GET /overview failed: ${err}`);
@@ -154,37 +144,35 @@ router.get('/overview', async (_req: Request, res: Response) => {
 
 // GET /api/league/champstats — from the pre-computed Champ Stats sheet
 router.get('/champstats', async (_req: Request, res: Response) => {
-  const cached = getCache<unknown>('champstats');
-  if (cached) { res.json(cached); return; }
   try {
-    const r = await axios.get<string>(sheetUrl('Champ Stats'), { responseType: 'text' });
-    const lines = r.data.split('\n');
-    // Row 0 is the header, data starts at row 1
-    const clean = (v: string | undefined) => (!v || v.startsWith('#')) ? '' : v;
+    const data = await cached('champstats', async () => {
+      const r = await axios.get<string>(sheetUrl('Champ Stats'), { responseType: 'text' });
+      const lines = r.data.split('\n');
+      // Row 0 is the header, data starts at row 1
+      const clean = (v: string | undefined) => (!v || v.startsWith('#')) ? '' : v;
 
-    const data = lines
-      .slice(1)
-      .filter(l => l.trim())
-      .map(line => {
-        // Google Sheets CSV wraps the whole line in quotes — strip the outer quotes then split on internal ","
-        const cols = line.trim().replace(/^"/, '').replace(/"$/, '').split('","');
-        const name = cols[2];
-        if (!name) return null;
-        return {
-          rank:      parseInt(cols[1]) || 0,
-          name,
-          picks:     parseInt(cols[5]) || 0,
-          bans:      parseInt(cols[6]) || 0,
-          wins:      parseInt(cols[9]) || 0,
-          losses:    parseInt(cols[10]) || 0,
-          winPct:    clean(cols[11]),
-          bluePicks: parseInt(cols[12]) || 0,
-          redPicks:  parseInt(cols[13]) || 0,
-        };
-      })
-      .filter(Boolean);
-
-    setCache('champstats', data);
+      return lines
+        .slice(1)
+        .filter(l => l.trim())
+        .map(line => {
+          // Google Sheets CSV wraps the whole line in quotes — strip the outer quotes then split on internal ","
+          const cols = line.trim().replace(/^"/, '').replace(/"$/, '').split('","');
+          const name = cols[2];
+          if (!name) return null;
+          return {
+            rank:      parseInt(cols[1]) || 0,
+            name,
+            picks:     parseInt(cols[5]) || 0,
+            bans:      parseInt(cols[6]) || 0,
+            wins:      parseInt(cols[9]) || 0,
+            losses:    parseInt(cols[10]) || 0,
+            winPct:    clean(cols[11]),
+            bluePicks: parseInt(cols[12]) || 0,
+            redPicks:  parseInt(cols[13]) || 0,
+          };
+        })
+        .filter(Boolean);
+    }, TTL);
     res.json(data);
   } catch (err) {
     logger.error(`GET /champstats failed: ${err}`);
@@ -194,36 +182,33 @@ router.get('/champstats', async (_req: Request, res: Response) => {
 
 // GET /api/league/players — per-player averages from the Player Stats sheet
 router.get('/players', async (_req: Request, res: Response) => {
-  const cached = getCache<unknown>('players');
-  if (cached) { res.json(cached); return; }
   try {
-    const r = await axios.get<string>(sheetUrl('Player Stats'), { responseType: 'text' });
-    const lines = r.data.split('\n');
-
-    const players = lines
-      .slice(1) // skip header
-      .map(line => parseRow(line))
-      .filter(cols => cols[2]?.trim().replace(/"/g, '')) // strip stray quotes then skip rows with no player name
-      .map(cols => {
-        const clean = (i: number) => cols[i]?.trim().replace(/^"|"$/g, '') ?? ''; // strip any surrounding quotes left by the CSV parser
-        const num   = (i: number) => parseFloat(clean(i)) || 0;
-        return {
-          name:   clean(2),
-          team:   clean(3),
-          role:   clean(4),
-          wins:   num(5),
-          losses: num(7),
-          rating: num(8),
-          kg:     num(9),
-          dg:     num(10),
-          ag:     num(11),
-          kdag:   num(12),
-          csg:    num(13),
-        };
-      });
-
-    setCache('players', players);
-    res.json(players);
+    const data = await cached('players', async () => {
+      const r = await axios.get<string>(sheetUrl('Player Stats'), { responseType: 'text' });
+      const lines = r.data.split('\n');
+      return lines
+        .slice(1) // skip header
+        .map(line => parseRow(line))
+        .filter(cols => cols[2]?.trim().replace(/"/g, '')) // strip stray quotes then skip rows with no player name
+        .map(cols => {
+          const clean = (i: number) => cols[i]?.trim().replace(/^"|"$/g, '') ?? ''; // strip any surrounding quotes left by the CSV parser
+          const num   = (i: number) => parseFloat(clean(i)) || 0;
+          return {
+            name:   clean(2),
+            team:   clean(3),
+            role:   clean(4),
+            wins:   num(5),
+            losses: num(7),
+            rating: num(8),
+            kg:     num(9),
+            dg:     num(10),
+            ag:     num(11),
+            kdag:   num(12),
+            csg:    num(13),
+          };
+        });
+    }, TTL);
+    res.json(data);
   } catch (err) {
     logger.error(`GET /players failed: ${err}`);
     res.status(500).json({ error: 'Failed to load player stats' });
