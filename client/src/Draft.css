@@ -177,12 +177,6 @@
   flex-shrink: 0;
 }
 
-.pick-info {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
 .pick-name {
   font-size: 0.75rem;
   font-weight: 600;
@@ -475,60 +469,9 @@
   border-bottom-color: var(--blue);
 }
 
-/* ── Champion Stats tab ──────────────────────────────── */
-.stats-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding-bottom: 2rem;
-}
-
-.stats-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.7rem 1.25rem;
-  flex-shrink: 0;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.stats-filters {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.stats-search {
-  width: 180px;
-}
-
-.stats-meta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.patch-label {
-  font-size: 0.75rem;
-  color: var(--blue);
-  font-weight: 600;
-}
-
 .result-count {
   font-size: 0.75rem;
   color: var(--text-muted);
-}
-
-.stats-table-wrapper {
-  overflow: visible;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
 }
 
 .stats-table {
@@ -574,12 +517,6 @@
 .stats-table tr:last-child td { border-bottom: none; }
 .stats-table tr:hover td { background: rgba(255,255,255,0.025); }
 
-.col-rank  { width: 48px; }
-.col-champ { min-width: 160px; }
-.col-role  { width: 80px; }
-.col-tier  { width: 60px; }
-.col-stat  { width: 110px; }
-
 .rank-num {
   color: var(--text-muted);
   font-size: 0.75rem;
@@ -602,39 +539,12 @@
   font-size: 0.85rem;
 }
 
-.role-cell {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
-
 .stat-cell {
   font-weight: 600;
   font-size: 0.875rem;
 }
 .stat-cell.positive { color: var(--win); }
 .stat-cell.negative { color: #f87171; }
-
-.sort-icon {
-  font-size: 0.7rem;
-  margin-left: 3px;
-}
-.sort-icon.inactive { opacity: 0.35; }
-
-.tier-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 5px;
-  font-size: 0.8rem;
-  font-weight: 800;
-}
-.tier-s { background: rgba(250,204,21,0.15); color: #facc15; border: 1px solid rgba(250,204,21,0.35); }
-.tier-a { background: rgba(34,197,94,0.12);  color: var(--win); border: 1px solid rgba(34,197,94,0.3); }
-.tier-b { background: rgba(59,130,246,0.12); color: var(--blue); border: 1px solid rgba(59,130,246,0.3); }
-.tier-c { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.3); }
-.tier-d { background: rgba(239,68,68,0.12);  color: var(--loss); border: 1px solid rgba(239,68,68,0.3); }
 
 /* ── Esports / Pro Scene tab ─────────────────────────── */
 .esports-container {
@@ -886,8 +796,6 @@
 .es-view-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
 
 /* ── Champion stats within esports tab ───────────────── */
-.champ-stats-loading { padding: 2rem; }
-
 .champ-stats-container {
   display: flex;
   flex-direction: column;
@@ -906,22 +814,6 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
-}
-
-.es-role-pills {
-  display: flex;
-  gap: 3px;
-  flex-wrap: wrap;
-}
-
-.es-role-pill {
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  padding: 1px 5px;
 }
 
 /* ── My League tab ───────────────────────────────────── */
@@ -1113,17 +1005,6 @@
 .lg-player-name { font-size: 0.65rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lg-player-lane { font-size: 0.65rem; color: var(--text-muted); min-width: 35px; }
 .lg-player-kda { font-size: 0.75rem; font-weight: 600; min-width: 70px; color: var(--text-muted); }
-.lg-player-items { display: flex; gap: 2px; flex-wrap: wrap; }
-.lg-item-name {
-  font-size: 0.55rem;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 3px;
-  color: var(--text-muted);
-  cursor: default;
-}
-
 .lg-bans-detail {
   display: flex;
   align-items: center;
