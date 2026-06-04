@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import axios from 'axios';
+import logger from '../logger';
 
 const router = Router();
 
@@ -145,7 +146,8 @@ router.get('/overview', async (_req: Request, res: Response) => {
     const data = parseSheet(r.data);
     setCache('overview', data);
     res.json(data);
-  } catch {
+  } catch (err) {
+    logger.error(`GET /overview failed: ${err}`);
     res.status(500).json({ error: 'Failed to load league data' });
   }
 });
@@ -184,7 +186,8 @@ router.get('/champstats', async (_req: Request, res: Response) => {
 
     setCache('champstats', data);
     res.json(data);
-  } catch {
+  } catch (err) {
+    logger.error(`GET /champstats failed: ${err}`);
     res.status(500).json({ error: 'Failed to load champ stats' });
   }
 });
@@ -221,7 +224,8 @@ router.get('/players', async (_req: Request, res: Response) => {
 
     setCache('players', players);
     res.json(players);
-  } catch {
+  } catch (err) {
+    logger.error(`GET /players failed: ${err}`);
     res.status(500).json({ error: 'Failed to load player stats' });
   }
 });

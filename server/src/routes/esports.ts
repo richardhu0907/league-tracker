@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import logger from '../logger';
 
 const router = Router();
 const KEY = process.env.LOLESPORTS_API_KEY ?? '';
@@ -31,7 +32,8 @@ router.get('/leagues', async (_req: Request, res: Response) => {
         .map((l: any) => ({ id: l.id, slug: l.slug, name: l.name, region: l.region, image: l.image }));
     });
     res.json(data);
-  } catch {
+  } catch (err) {
+    logger.error(`GET /leagues failed: ${err}`);
     res.status(500).json({ error: 'Failed to fetch leagues' });
   }
 });
@@ -122,7 +124,8 @@ router.get('/upcoming/:leagueId', async (req: Request, res: Response) => {
         }));
     });
     res.json(data);
-  } catch {
+  } catch (err) {
+    logger.error(`GET /upcoming failed: ${err}`);
     res.status(500).json({ error: 'Failed to fetch upcoming matches' });
   }
 });
