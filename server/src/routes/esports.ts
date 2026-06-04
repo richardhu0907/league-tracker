@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 const router = Router();
-const KEY = '0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z';
+const KEY = process.env.LOLESPORTS_API_KEY ?? '';
 const BASE = 'https://esports-api.lolesports.com/persisted/gw';
 const H = { 'x-api-key': KEY };
 
