@@ -110,6 +110,7 @@ export default function DraftTab() {
   const [draft, setDraft] = useState<DraftState>(EMPTY);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [autoChamp, setAutoChamp] = useState<ChampionData | null>(null);
 
   useEffect(() => {
     const v = getDDragonVersion();
@@ -158,6 +159,7 @@ export default function DraftTab() {
       return next;
     });
     setStep(s => s + 1);
+    setAutoChamp(champions.find(c => c.id === id) ?? null);
   };
 
   const handleUndo = () => {
@@ -179,6 +181,7 @@ export default function DraftTab() {
       return next;
     });
     setStep(s => s - 1);
+    setAutoChamp(null);
   };
 
   const v = getDDragonVersion();
@@ -202,7 +205,7 @@ export default function DraftTab() {
           <button onClick={handleUndo} disabled={step === 0} className="draft-btn">
             Undo
           </button>
-          <button onClick={() => { setDraft(EMPTY); setStep(0); }} className="draft-btn reset">
+          <button onClick={() => { setDraft(EMPTY); setStep(0); setAutoChamp(null); }} className="draft-btn reset">
             Reset
           </button>
         </div>
@@ -223,7 +226,13 @@ export default function DraftTab() {
             disabled={isDone}
             version={v}
           />
-          <CounterPanel champions={champions} version={v} />
+          <CounterPanel
+            champions={champions}
+            version={v}
+            autoChamp={autoChamp}
+            onSelect={handleSelect}
+            usedChampions={usedChampions}
+          />
         </div>
 
         <div className="draft-side red-side">

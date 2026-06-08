@@ -11,15 +11,27 @@ interface Matchup {
 interface Props {
   champions: ChampionData[];
   version: string;
+  autoChamp: ChampionData | null;
+  onSelect: (id: string) => void;
+  usedChampions: Set<string>;
 }
 
-export default function CounterPanel({ champions, version }: Props) {
+export default function CounterPanel({ champions, version, autoChamp, onSelect, usedChampions }: Props) {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<ChampionData | null>(null);
   const [matchups, setMatchups] = useState<Matchup[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+
+  // Maps lolalytics slug (e.g. "missfortune") → DDragon id (e.g. "MissFortune")
+  const slugToId = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const c of champions) {
+      map.set(c.name.toLowerCase().replace(/[^a-z]/g, ''), c.id);
+    }
+    return map;
+  }, [champions]);
 
   const suggestions = useMemo(() => {
     const q = search.toLowerCase();
@@ -37,7 +49,12 @@ export default function CounterPanel({ champions, version }: Props) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const selectChamp = (champ: ChampionData) => {
+  useEffect(() => {
+    if (!autoChamp) return;
+    fetchCounters(autoChamp);
+  }, [autoChamp]);
+
+  const fetchCounters = (champ: ChampionData) => {
     setSelected(champ);
     setSearch(champ.name);
     setOpen(false);
@@ -49,6 +66,8 @@ export default function CounterPanel({ champions, version }: Props) {
       .catch(() => setMatchups([]))
       .finally(() => setLoading(false));
   };
+
+  const selectChamp = (champ: ChampionData) => fetchCounters(champ);
 
   return (
     <div className="counter-panel">
@@ -84,20 +103,31 @@ export default function CounterPanel({ champions, version }: Props) {
 
       {!loading && matchups.length > 0 && (
         <div className="counter-list">
-          {matchups.map((m, i) => (
-            <div key={m.opponent} className="counter-row">
-              <span className="counter-rank">{i + 1}</span>
-              <img
-                src={`https://cdn5.lolalytics.com/champx46/${m.opponentSlug}.webp`}
-                alt={m.opponent}
-                className="counter-icon"
-                onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
-              <span className="counter-name">{m.opponent}</span>
-              <span className="counter-wr">{m.winRate}%</span>
-              <span className="counter-games">{m.games.toLocaleString()} games</span>
-            </div>
-          ))}
+          {matchups.map((m, i) => {
+            const ddId = slugToId.get(m.opponentSlug);
+            const isUsed = ddId ? usedChampions.has(ddId) : false;
+            return (
+              <button
+                key={m.opponent}
+                className={`counter-row${isUsed ? ' used' : ''}`}
+                onClick={() => ddId && onSelect(ddId)}
+                disabled={!ddId || isUsed}
+              >
+                <span className="counter-rank">{i + 1}</span>
+                <img
+                  src={ddId
+                    ? `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ddId}.png`
+                    : `https://cdn5.lolalytics.com/champx46/${m.opponentSlug}.webp`}
+                  alt={m.opponent}
+                  className="counter-icon"
+                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+                <span className="counter-name">{m.opponent}</span>
+                <span className="counter-wr">{m.winRate}%</span>
+                <span className="counter-games">{m.games.toLocaleString()} games</span>
+              </button>
+            );
+          })}
         </div>
       )}
 

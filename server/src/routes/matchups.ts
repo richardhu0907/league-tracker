@@ -36,7 +36,12 @@ router.get('/:champion', async (req: Request, res: Response) => {
       while ((m = re.exec(html)) !== null) {
         const games = parseInt(m[3].replace(/,/g, '')); // remove thousands commas before parsing
         if (games < 1000) continue;
-        const opponent = m[2];
+        const opponent = m[2]
+          .replace(/&#39;/g, "'")
+          .replace(/&amp;/g, '&')
+          .replace(/&quot;/g, '"')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>');
         matchups.push({
           opponent,
           opponentSlug: opponent.toLowerCase().replace(/[^a-z]/g, ''), // strip non-letters for lolalytics image URL
