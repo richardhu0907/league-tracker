@@ -51,10 +51,15 @@ router.get('/:champion', async (req: Request, res: Response) => {
       }
 
       matchups.sort((a, b) => a.winRate - b.winRate);
-      return matchups.slice(0, 5);
+      return matchups;
     }, TTL);
 
-    res.json(data);
+    const mode = req.query.mode;
+    const result = mode === 'best'
+      ? data.slice(-5).reverse()  // highest win rates = their victims
+      : data.slice(0, 5);         // lowest win rates = their counters
+
+    res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: err.message ?? 'Failed to fetch matchup data' });
   }

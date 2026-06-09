@@ -111,6 +111,7 @@ export default function DraftTab() {
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
   const [autoChamp, setAutoChamp] = useState<ChampionData | null>(null);
+  const [autoAction, setAutoAction] = useState<'pick' | 'ban'>('pick');
 
   useEffect(() => {
     const v = getDDragonVersion();
@@ -160,6 +161,7 @@ export default function DraftTab() {
     });
     setStep(s => s + 1);
     setAutoChamp(champions.find(c => c.id === id) ?? null);
+    setAutoAction(current.type);
   };
 
   const handleUndo = () => {
@@ -230,6 +232,7 @@ export default function DraftTab() {
             champions={champions}
             version={v}
             autoChamp={autoChamp}
+            autoAction={autoAction}
             onSelect={handleSelect}
             usedChampions={usedChampions}
           />

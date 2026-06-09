@@ -12,11 +12,12 @@ interface Props {
   champions: ChampionData[];
   version: string;
   autoChamp: ChampionData | null;
+  autoAction: 'pick' | 'ban';
   onSelect: (id: string) => void;
   usedChampions: Set<string>;
 }
 
-export default function CounterPanel({ champions, version, autoChamp, onSelect, usedChampions }: Props) {
+export default function CounterPanel({ champions, version, autoChamp, autoAction, onSelect, usedChampions }: Props) {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<ChampionData | null>(null);
   const [matchups, setMatchups] = useState<Matchup[]>([]);
@@ -51,28 +52,29 @@ export default function CounterPanel({ champions, version, autoChamp, onSelect, 
 
   useEffect(() => {
     if (!autoChamp) return;
-    fetchCounters(autoChamp);
-  }, [autoChamp]);
+    fetchMatchups(autoChamp, autoAction);
+  }, [autoChamp, autoAction]);
 
-  const fetchCounters = (champ: ChampionData) => {
+  const fetchMatchups = (champ: ChampionData, mode: 'pick' | 'ban') => {
     setSelected(champ);
     setSearch(champ.name);
     setOpen(false);
     setLoading(true);
     setMatchups([]);
-    fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/matchups/${champ.id}`)
+    const url = `${import.meta.env.VITE_API_URL ?? ''}/api/matchups/${champ.id}${mode === 'ban' ? '?mode=best' : ''}`;
+    fetch(url)
       .then(r => r.json())
       .then(data => Array.isArray(data) ? setMatchups(data) : setMatchups([]))
       .catch(() => setMatchups([]))
       .finally(() => setLoading(false));
   };
 
-  const selectChamp = (champ: ChampionData) => fetchCounters(champ);
+  const selectChamp = (champ: ChampionData) => fetchMatchups(champ, 'pick');
 
   return (
     <div className="counter-panel">
       <div className="counter-header">
-        <span className="counter-title">Counters</span>
+        <span className="counter-title">{selected ? (autoAction === 'ban' ? 'Best Matchups' : 'Counters') : 'Counters'}</span>
         <div className="counter-search-wrap" ref={wrapRef}>
           <input
             type="text"
