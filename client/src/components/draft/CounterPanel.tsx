@@ -60,7 +60,7 @@ export default function CounterPanel({ champions, version, autoChamp, onSelect, 
     setOpen(false);
     setLoading(true);
     setMatchups([]);
-    fetch(`http://localhost:3001/api/matchups/${champ.id}`)
+    fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/matchups/${champ.id}`)
       .then(r => r.json())
       .then(data => Array.isArray(data) ? setMatchups(data) : setMatchups([]))
       .catch(() => setMatchups([]))

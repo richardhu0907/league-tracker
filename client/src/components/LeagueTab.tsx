@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { getDDragonVersion } from '../api/riot';
 
-const BASE = 'http://localhost:3001/api/league';
+const BASE = `${import.meta.env.VITE_API_URL ?? ''}/api/league`;
 
 interface Player {
   name: string; champion: string; lane: string; kda: string;

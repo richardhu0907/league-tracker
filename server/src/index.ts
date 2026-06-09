@@ -8,7 +8,7 @@ import matchupsRouter from './routes/matchups';
 const app = express();
 const PORT = process.env.PORT ?? 3001;
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: ['http://localhost:5173', 'http://13.58.213.244'] }));
 app.use(express.json());
 
 app.use('/api/esports', esportsRouter);
