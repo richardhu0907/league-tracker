@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { ChampionData, DraftAction, DraftState } from '../../types';
-import { getDDragonVersion } from '../../api/riot';
 import ChampionGrid from './ChampionGrid';
 import CounterPanel from './CounterPanel';
 
@@ -107,6 +106,7 @@ function PickCol({ picks, activeSlot, team, version, champMap }: PickColProps) {
 export default function DraftTab() {
   const [champions, setChampions] = useState<ChampionData[]>([]);
   const [champMap, setChampMap] = useState<Map<string, string>>(new Map());
+  const [version, setVersion] = useState('14.24.1');
   const [draft, setDraft] = useState<DraftState>(EMPTY);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -114,8 +114,14 @@ export default function DraftTab() {
   const [autoAction, setAutoAction] = useState<'pick' | 'ban'>('pick');
 
   useEffect(() => {
-    const v = getDDragonVersion();
-    fetch(`https://ddragon.leagueoflegends.com/cdn/${v}/data/en_US/champion.json`)
+    fetch('https://ddragon.leagueoflegends.com/api/versions.json')
+      .then(r => r.json())
+      .then((versions: string[]) => versions[0])
+      .catch(() => '14.24.1')
+      .then(v => {
+        setVersion(v);
+        return fetch(`https://ddragon.leagueoflegends.com/cdn/${v}/data/en_US/champion.json`);
+      })
       .then(r => r.json())
       .then((data: { data: Record<string, { id: string; name: string; tags: string[] }> }) => {
         const list: ChampionData[] = Object.values(data.data).map(c => ({
@@ -186,7 +192,7 @@ export default function DraftTab() {
     setAutoChamp(null);
   };
 
-  const v = getDDragonVersion();
+  const v = version;
   const activeBlueBan  = current?.team === 'blue' && current.type === 'ban'  ? current.slot : -1;
   const activeRedBan   = current?.team === 'red'  && current.type === 'ban'  ? current.slot : -1;
   const activeBluePick = current?.team === 'blue' && current.type === 'pick' ? current.slot : -1;
