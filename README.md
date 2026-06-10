@@ -1,5 +1,7 @@
 # LoL Tracker
 
+Live site: http://13.58.213.244/
+
 A League of Legends companion app built with React, TypeScript, and Express.
 
 ## Tabs
@@ -15,24 +17,3 @@ A League of Legends companion app built with React, TypeScript, and Express.
 - **Client** — React 18, TypeScript, Vite
 - **Server** — Node.js, Express, TypeScript
 - **Data** — Lolesports API, gol.gg (scraped), Google Sheets CSV export, DDragon (champion assets)
-
-## Running locally
-
-### Prerequisites
-- Node.js 18+
-
-### Server
-```bash
-cd server
-npm install
-npm run dev
-```
-Runs on `http://localhost:3001`
-
-### Client
-```bash
-cd client
-npm install
-npm run dev
-```
-Runs on `http://localhost:5173`
