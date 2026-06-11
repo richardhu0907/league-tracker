@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getDDragonVersion } from '../api/riot';
+import ProMatchesTab, { PrioPicksTab } from './ProMatchesTab';
 
 const BASE = `${import.meta.env.VITE_API_URL ?? ''}/api/esports`;
 
@@ -162,7 +163,7 @@ function ChampionStatsView({ leagueId }: { leagueId: string }) {
   );
 }
 
-type EsportsView = 'results' | 'champstats';
+type EsportsView = 'results' | 'champstats' | 'drafts' | 'priopicks';
 
 export default function EsportsTab() {
   const [leagues, setLeagues] = useState<League[]>([]);
@@ -200,17 +201,6 @@ export default function EsportsTab() {
 
   return (
     <div className="esports-container">
-      {/* League selector */}
-      <div className="es-league-bar">
-        {leagues.map(l => (
-          <button key={l.id} onClick={() => { setSelected(l); setView('results'); }}
-            className={`es-league-btn ${selected?.id === l.id ? 'active' : ''}`} title={l.name}>
-            <img src={l.image} alt={l.name} className="es-league-img" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-            <span>{l.name}</span>
-          </button>
-        ))}
-      </div>
-
       {/* Sub-tab toggle */}
       <div className="es-view-tabs">
         <button className={`es-view-tab ${view === 'results' ? 'active' : ''}`} onClick={() => setView('results')}>
@@ -219,9 +209,32 @@ export default function EsportsTab() {
         <button className={`es-view-tab ${view === 'champstats' ? 'active' : ''}`} onClick={() => setView('champstats')}>
           Champion Stats
         </button>
+        <button className={`es-view-tab ${view === 'drafts' ? 'active' : ''}`} onClick={() => setView('drafts')}>
+          Pro Drafts
+        </button>
+        <button className={`es-view-tab ${view === 'priopicks' ? 'active' : ''}`} onClick={() => setView('priopicks')}>
+          Prio Picks
+        </button>
       </div>
 
-      {view === 'champstats' && selected ? (
+      {/* League selector — only relevant for Results & Standings */}
+      {view === 'results' && (
+        <div className="es-league-bar">
+          {leagues.map(l => (
+            <button key={l.id} onClick={() => setSelected(l)}
+              className={`es-league-btn ${selected?.id === l.id ? 'active' : ''}`} title={l.name}>
+              <img src={l.image} alt={l.name} className="es-league-img" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+              <span>{l.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {view === 'priopicks' ? (
+        <PrioPicksTab />
+      ) : view === 'drafts' ? (
+        <ProMatchesTab />
+      ) : view === 'champstats' && selected ? (
         <ChampionStatsView leagueId={selected.id} />
       ) : loadingContent ? (
         <div className="loading">Loading {selected?.name} data...</div>
