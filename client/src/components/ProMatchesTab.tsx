@@ -34,24 +34,6 @@ function useSelectedTournaments() {
   return { selected, toggle, activePages };
 }
 
-function TournamentChips({ selected, onToggle }: { selected: string[]; onToggle: (p: string) => void }) {
-  return (
-    <div className="pm-tourney-chips">
-      <button className={`pm-chip${selected.includes('all') ? ' active' : ''}`} onClick={() => onToggle('all')}>
-        All
-      </button>
-      {TOURNAMENTS.map(t => (
-        <button
-          key={t.page}
-          className={`pm-chip${selected.includes(t.page) ? ' active' : ''}`}
-          onClick={() => onToggle(t.page)}
-        >
-          {t.label}
-        </button>
-      ))}
-    </div>
-  );
-}
 
 function TournamentDropdown({ selected, onToggle }: { selected: string[]; onToggle: (p: string) => void }) {
   const [open, setOpen] = useState(false);
