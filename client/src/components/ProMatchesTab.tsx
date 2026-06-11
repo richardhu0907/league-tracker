@@ -440,13 +440,48 @@ export function PrioPicksTab() {
   const filtered = selectedPatches.includes('all') ? games : games.filter(g => selectedPatches.includes(g.patch));
 
   const counts = new Map<string, number>();
+  const comboCounts = new Map<string, { a: string; b: string; count: number }>();
+
   for (const game of filtered) {
-    const firstPick = game.draft.find(d => d.slot === 7);
-    if (firstPick?.champion) {
-      counts.set(firstPick.champion, (counts.get(firstPick.champion) ?? 0) + 1);
+    const slot7 = game.draft.find(d => d.slot === 7)?.champion;
+    if (slot7) counts.set(slot7, (counts.get(slot7) ?? 0) + 1);
+
+    const slot8 = game.draft.find(d => d.slot === 8)?.champion;
+    const slot9 = game.draft.find(d => d.slot === 9)?.champion;
+    if (slot8 && slot9) {
+      const [a, b] = [slot8, slot9].sort();
+      const key = `${a}|||${b}`;
+      if (!comboCounts.has(key)) comboCounts.set(key, { a, b, count: 0 });
+      comboCounts.get(key)!.count++;
     }
   }
+
   const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  const combos = [...comboCounts.values()].filter(c => c.count >= 3).sort((a, b) => b.count - a.count);
+
+  const [selectedB1, setSelectedB1] = useState<string | null>(null);
+
+  const answersByRole = (() => {
+    if (!selectedB1) return [];
+    const roleMap = new Map<string, Map<string, number>>();
+    for (const game of filtered) {
+      const b1 = game.draft.find(d => d.slot === 7);
+      if (b1?.champion !== selectedB1) continue;
+      const role = b1.role ?? '';
+      if (!roleMap.has(role)) roleMap.set(role, new Map());
+      const opposing = game.draft.find(d => d.action === 'pick' && d.team === 2 && d.role === role);
+      if (opposing?.champion) {
+        const m = roleMap.get(role)!;
+        m.set(opposing.champion, (m.get(opposing.champion) ?? 0) + 1);
+      }
+    }
+    return [...roleMap.entries()]
+      .map(([role, counts]) => ({
+        role,
+        answers: [...counts.entries()].map(([champ, count]) => ({ champ, count })).sort((a, b) => b.count - a.count),
+      }))
+      .sort((a, b) => b.answers.reduce((s, x) => s + x.count, 0) - a.answers.reduce((s, x) => s + x.count, 0));
+  })();
 
   return (
     <div className="pm-container">
@@ -459,16 +494,65 @@ export function PrioPicksTab() {
       {error && <div className="error-msg">{error}</div>}
 
       {!loading && !error && sorted.length > 0 && (
-        <div className="pp-list">
-          {sorted.map(([champ, count], i) => (
-            <div key={champ} className="pp-row">
-              <span className="pp-rank">{i + 1}</span>
-              <ChampIcon name={champ} size={36} />
-              <span className="pp-name">{champ}</span>
-              <span className="pp-count">{count}×</span>
+        selectedB1 ? (
+          <div>
+            <button className="pp-back-btn" onClick={() => setSelectedB1(null)}>
+              ← Back
+            </button>
+            <div className="pp-detail-header">
+              <ChampIcon name={selectedB1} size={48} />
+              <div className="pp-detail-name">{selectedB1}</div>
             </div>
-          ))}
-        </div>
+            {answersByRole.map(({ role, answers }) => (
+              <div key={role} className="pp-answers-section">
+                <div className="pp-section-label">{selectedB1} {role} answers</div>
+                <div className="pp-answers-grid">
+                  {answers.map(({ champ, count }) => (
+                    <div key={champ} className="pp-answer-card">
+                      <ChampIcon name={champ} size={52} />
+                      <span className="pp-answer-name">{champ}</span>
+                      <span className="pp-answer-count">{count}×</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="pp-columns">
+            <div>
+              <div className="pp-section-label">B1</div>
+              <div className="pp-list">
+                {sorted.map(([champ, count], i) => (
+                  <div
+                    key={champ}
+                    className="pp-row pp-row-clickable"
+                    onClick={() => setSelectedB1(champ)}
+                  >
+                    <span className="pp-rank">{i + 1}</span>
+                    <ChampIcon name={champ} size={36} />
+                    <span className="pp-name">{champ}</span>
+                    <span className="pp-count">{count}×</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="pp-section-label">R1/R2</div>
+              <div className="pp-list">
+                {combos.map(({ a, b, count }, i) => (
+                  <div key={`${a}|||${b}`} className="pp-row">
+                    <span className="pp-rank">{i + 1}</span>
+                    <ChampIcon name={a} size={36} />
+                    <ChampIcon name={b} size={36} />
+                    <span className="pp-count">{count}×</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )
       )}
     </div>
   );

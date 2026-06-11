@@ -461,6 +461,21 @@
   background-size: 10px 8px;
 }
 
+.pp-columns {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.pp-section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
 .pp-list {
   display: flex;
   flex-direction: column;
@@ -476,6 +491,89 @@
   background: var(--surface);
   border-radius: 6px;
   border: 1px solid var(--border);
+}
+
+.pp-back-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.pp-back-btn:hover {
+  color: var(--text);
+}
+
+.pp-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.pp-detail-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.pp-detail-role {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+}
+
+.pp-answers-section {
+  margin-bottom: 1.5rem;
+}
+
+.pp-answers-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.pp-answer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.5rem;
+  min-width: 72px;
+}
+
+.pp-answer-name {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 68px;
+}
+
+.pp-answer-count {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.pp-row-clickable {
+  cursor: pointer;
+}
+
+.pp-row-clickable:hover {
+  border-color: var(--blue);
+}
+
+.pp-row-active {
+  border-color: var(--blue);
+  background: var(--surface2);
 }
 
 .pp-rank {
