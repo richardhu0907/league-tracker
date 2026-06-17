@@ -49,14 +49,20 @@ const EMPTY: DraftState = {
 interface BanRowProps {
   bans: (string | null)[];
   activeSlot: number;
+  editingSlot?: number;
   version: string;
+  onSlotClick?: (slot: number) => void;
 }
 
-function BanRow({ bans, activeSlot, version }: BanRowProps) {
+function BanRow({ bans, activeSlot, editingSlot, version, onSlotClick }: BanRowProps) {
   return (
     <div className="ban-row">
       {bans.map((id, i) => (
-        <div key={i} className={`ban-slot ${id ? 'filled' : ''} ${i === activeSlot ? 'active' : ''}`}>
+        <div
+          key={i}
+          className={`ban-slot ${id ? 'filled' : ''} ${i === activeSlot ? 'active' : ''} ${i === editingSlot ? 'editing' : ''}`}
+          onClick={() => id && onSlotClick?.(i)}
+        >
           {id && (
             <img
               src={`https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${id}.png`}
@@ -72,18 +78,25 @@ function BanRow({ bans, activeSlot, version }: BanRowProps) {
 interface PickColProps {
   picks: (string | null)[];
   activeSlot: number;
+  editingSlot?: number;
   team: 'blue' | 'red';
   version: string;
   champMap: Map<string, string>;
+  onSlotClick?: (slot: number) => void;
 }
 
-function PickCol({ picks, activeSlot, team, version, champMap }: PickColProps) {
+function PickCol({ picks, activeSlot, editingSlot, team, version, champMap, onSlotClick }: PickColProps) {
   return (
     <div className="pick-col">
       {picks.map((id, i) => {
         const isActive = i === activeSlot;
+        const isEditing = i === editingSlot;
         return (
-          <div key={i} className={`pick-slot ${id ? 'filled' : ''} ${isActive ? `active ${team}-active` : ''}`}>
+          <div
+            key={i}
+            className={`pick-slot ${id ? 'filled' : ''} ${isActive ? `active ${team}-active` : ''} ${isEditing ? 'editing' : ''}`}
+            onClick={() => id && onSlotClick?.(i)}
+          >
             {id ? (
               <>
                 <img
@@ -109,9 +122,11 @@ export default function DraftTab() {
   const [version, setVersion] = useState('14.24.1');
   const [draft, setDraft] = useState<DraftState>(EMPTY);
   const [step, setStep] = useState(0);
+  const [resetKey, setResetKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [autoChamp, setAutoChamp] = useState<ChampionData | null>(null);
   const [autoAction, setAutoAction] = useState<'pick' | 'ban'>('pick');
+  const [editingSlot, setEditingSlot] = useState<{ team: 'blue' | 'red'; type: 'ban' | 'pick'; slot: number } | null>(null);
 
   useEffect(() => {
     fetch('https://ddragon.leagueoflegends.com/api/versions.json')
@@ -140,14 +155,51 @@ export default function DraftTab() {
   const isDone = step >= DRAFT_ORDER.length;
   const current = isDone ? null : DRAFT_ORDER[step];
 
+  const editingChamp = editingSlot
+    ? (editingSlot.type === 'ban'
+        ? (editingSlot.team === 'blue' ? draft.blueBans : draft.redBans)[editingSlot.slot]
+        : (editingSlot.team === 'blue' ? draft.bluePicks : draft.redPicks)[editingSlot.slot])
+    : null;
+
   const usedChampions = new Set<string>([
     ...draft.blueBans.filter((c): c is string => c !== null),
     ...draft.redBans.filter((c): c is string => c !== null),
     ...draft.bluePicks.filter((c): c is string => c !== null),
     ...draft.redPicks.filter((c): c is string => c !== null),
   ]);
+  if (editingChamp) usedChampions.delete(editingChamp);
+
+  const handleSlotClick = (team: 'blue' | 'red', type: 'ban' | 'pick', slot: number) => {
+    if (editingSlot?.team === team && editingSlot.type === type && editingSlot.slot === slot) {
+      setEditingSlot(null);
+    } else {
+      setEditingSlot({ team, type, slot });
+    }
+  };
 
   const handleSelect = (id: string) => {
+    if (editingSlot) {
+      setDraft(prev => {
+        const next = { ...prev };
+        if (editingSlot.type === 'ban') {
+          const bans = editingSlot.team === 'blue' ? [...prev.blueBans] : [...prev.redBans];
+          bans[editingSlot.slot] = id;
+          if (editingSlot.team === 'blue') next.blueBans = bans;
+          else next.redBans = bans;
+        } else {
+          const picks = editingSlot.team === 'blue' ? [...prev.bluePicks] : [...prev.redPicks];
+          picks[editingSlot.slot] = id;
+          if (editingSlot.team === 'blue') next.bluePicks = picks;
+          else next.redPicks = picks;
+        }
+        return next;
+      });
+      setEditingSlot(null);
+      setAutoChamp(champions.find(c => c.id === id) ?? null);
+      setAutoAction(editingSlot.type);
+      return;
+    }
+
     if (isDone || usedChampions.has(id) || !current) return;
 
     setDraft(prev => {
@@ -213,7 +265,7 @@ export default function DraftTab() {
           <button onClick={handleUndo} disabled={step === 0} className="draft-btn">
             Undo
           </button>
-          <button onClick={() => { setDraft(EMPTY); setStep(0); setAutoChamp(null); }} className="draft-btn reset">
+          <button onClick={() => { setDraft(EMPTY); setStep(0); setAutoChamp(null); setResetKey(k => k + 1); }} className="draft-btn reset">
             Reset
           </button>
         </div>
@@ -222,19 +274,21 @@ export default function DraftTab() {
       <div className="draft-body">
         <div className="draft-side blue-side">
           <div className="side-label blue-label">BLUE SIDE</div>
-          <BanRow bans={draft.blueBans} activeSlot={activeBlueBan} version={v} />
-          <PickCol picks={draft.bluePicks} activeSlot={activeBluePick} team="blue" version={v} champMap={champMap} />
+          <BanRow bans={draft.blueBans} activeSlot={activeBlueBan} editingSlot={editingSlot?.team === 'blue' && editingSlot.type === 'ban' ? editingSlot.slot : -1} version={v} onSlotClick={s => handleSlotClick('blue', 'ban', s)} />
+          <PickCol picks={draft.bluePicks} activeSlot={activeBluePick} editingSlot={editingSlot?.team === 'blue' && editingSlot.type === 'pick' ? editingSlot.slot : -1} team="blue" version={v} champMap={champMap} onSlotClick={s => handleSlotClick('blue', 'pick', s)} />
         </div>
 
         <div className="draft-center">
           <ChampionGrid
+            key={`grid-${resetKey}`}
             champions={champions}
             usedChampions={usedChampions}
             onSelect={handleSelect}
-            disabled={isDone}
+            disabled={isDone && !editingSlot}
             version={v}
           />
           <CounterPanel
+            key={`counter-${resetKey}`}
             champions={champions}
             version={v}
             autoChamp={autoChamp}
@@ -246,8 +300,8 @@ export default function DraftTab() {
 
         <div className="draft-side red-side">
           <div className="side-label red-label">RED SIDE</div>
-          <BanRow bans={draft.redBans} activeSlot={activeRedBan} version={v} />
-          <PickCol picks={draft.redPicks} activeSlot={activeRedPick} team="red" version={v} champMap={champMap} />
+          <BanRow bans={draft.redBans} activeSlot={activeRedBan} editingSlot={editingSlot?.team === 'red' && editingSlot.type === 'ban' ? editingSlot.slot : -1} version={v} onSlotClick={s => handleSlotClick('red', 'ban', s)} />
+          <PickCol picks={draft.redPicks} activeSlot={activeRedPick} editingSlot={editingSlot?.team === 'red' && editingSlot.type === 'pick' ? editingSlot.slot : -1} team="red" version={v} champMap={champMap} onSlotClick={s => handleSlotClick('red', 'pick', s)} />
         </div>
       </div>
     </div>
