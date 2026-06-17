@@ -30,21 +30,6 @@ const DRAFT_ORDER: DraftAction[] = [
   { team: 'red',  type: 'pick', slot: 4 },
 ];
 
-function getPhaseLabel(step: number): string {
-  if (step >= 20) return 'Draft Complete';
-  if (step >= 16) return 'Pick Phase 2';
-  if (step >= 12) return 'Ban Phase 2';
-  if (step >= 6)  return 'Pick Phase 1';
-  return 'Ban Phase 1';
-}
-
-const EMPTY_DRAFT: DraftState = {
-  blueBans:  [null, null, null, null, null],
-  redBans:   [null, null, null, null, null],
-  bluePicks: [null, null, null, null, null],
-  redPicks:  [null, null, null, null, null],
-};
-
 function emptyDraft(): DraftState {
   return {
     blueBans:  [null, null, null, null, null],
