@@ -5,9 +5,20 @@ import { cached } from '../cache';
 
 const router = Router();
 
-const SHEET_ID = '1ubW0_OVMK-G7ltSk2RDljYEiy038lq1P-TMYIhhrAQM';
-const sheetUrl = (sheet: string) =>
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}`;
+const LEAGUES: Record<string, string> = {
+  avl: '1ubW0_OVMK-G7ltSk2RDljYEiy038lq1P-TMYIhhrAQM',
+  aml: '119pFgpdM_c_TQCi6CbajEqZQvAS9B4Tt0h2nepG6RiI',
+};
+
+function sheetUrl(sheetId: string, sheet: string) {
+  return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheet)}`;
+}
+
+function resolveLeague(req: Request): { slug: string; sheetId: string } | null {
+  const slug = ((req.query.league as string) ?? 'avl').toLowerCase();
+  const sheetId = LEAGUES[slug];
+  return sheetId ? { slug, sheetId } : null;
+}
 
 const TTL = 15 * 60 * 1000; // Google Sheets is manually updated — refresh every 15 min
 
@@ -129,10 +140,12 @@ function parseSheet(csv: string) {
 }
 
 // GET /api/league/overview — match history + standings
-router.get('/overview', async (_req: Request, res: Response) => {
+router.get('/overview', async (req: Request, res: Response) => {
+  const league = resolveLeague(req);
+  if (!league) return res.status(400).json({ error: 'Unknown league' });
   try {
-    const data = await cached('overview', async () => {
-      const r = await axios.get<string>(sheetUrl('Match History'), { responseType: 'text' });
+    const data = await cached(`${league.slug}:overview`, async () => {
+      const r = await axios.get<string>(sheetUrl(league.sheetId, 'Match History'), { responseType: 'text' });
       return parseSheet(r.data);
     }, TTL);
     res.json(data);
@@ -143,10 +156,12 @@ router.get('/overview', async (_req: Request, res: Response) => {
 });
 
 // GET /api/league/champstats — from the pre-computed Champ Stats sheet
-router.get('/champstats', async (_req: Request, res: Response) => {
+router.get('/champstats', async (req: Request, res: Response) => {
+  const league = resolveLeague(req);
+  if (!league) return res.status(400).json({ error: 'Unknown league' });
   try {
-    const data = await cached('champstats', async () => {
-      const r = await axios.get<string>(sheetUrl('Champ Stats'), { responseType: 'text' });
+    const data = await cached(`${league.slug}:champstats`, async () => {
+      const r = await axios.get<string>(sheetUrl(league.sheetId, 'Champ Stats'), { responseType: 'text' });
       const lines = r.data.split('\n');
       // Row 0 is the header, data starts at row 1
       const clean = (v: string | undefined) => (!v || v.startsWith('#')) ? '' : v;
@@ -181,10 +196,12 @@ router.get('/champstats', async (_req: Request, res: Response) => {
 });
 
 // GET /api/league/players — per-player averages from the Player Stats sheet
-router.get('/players', async (_req: Request, res: Response) => {
+router.get('/players', async (req: Request, res: Response) => {
+  const league = resolveLeague(req);
+  if (!league) return res.status(400).json({ error: 'Unknown league' });
   try {
-    const data = await cached('players', async () => {
-      const r = await axios.get<string>(sheetUrl('Player Stats'), { responseType: 'text' });
+    const data = await cached(`${league.slug}:players`, async () => {
+      const r = await axios.get<string>(sheetUrl(league.sheetId, 'Player Stats'), { responseType: 'text' });
       const lines = r.data.split('\n');
       return lines
         .slice(1) // skip header
@@ -196,7 +213,7 @@ router.get('/players', async (_req: Request, res: Response) => {
           return {
             name:   clean(2),
             team:   clean(3),
-            role:   clean(4),
+            role:   ({ Middle: 'Mid', ADC: 'Bot' } as Record<string, string>)[clean(4)] ?? clean(4),
             wins:   num(5),
             losses: num(7),
             rating: num(8),

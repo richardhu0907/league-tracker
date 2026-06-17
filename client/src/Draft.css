@@ -857,23 +857,23 @@
 
 .league-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 0.75rem 1.25rem;
+  overflow: hidden;
   flex-shrink: 0;
 }
 
-.lg-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0;
+.league-selector {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--border);
 }
-.lg-subtitle { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; display: block; }
 
-.league-view-tabs { display: flex; gap: 0; }
+
+.league-view-tabs { display: flex; gap: 0; padding: 0.25rem 0.5rem; border-top: 1px solid var(--border); }
 .lg-view-tab {
   background: none;
   border: none;

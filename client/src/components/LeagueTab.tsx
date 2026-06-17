@@ -4,6 +4,11 @@ import { getDDragonVersion } from '../api/riot';
 
 const BASE = `${import.meta.env.VITE_API_URL ?? ''}/api/league`;
 
+const LEAGUES = [
+  { id: 'avl', label: 'AVL Spring 26' },
+  { id: 'aml', label: 'AML Summer 26' },
+] as const;
+
 interface Player {
   name: string; champion: string; lane: string; kda: string;
 }
@@ -104,6 +109,7 @@ function MatchCard({ match }: { match: Match }) {
 }
 
 export default function LeagueTab() {
+  const [leagueId, setLeagueId] = useState<'avl' | 'aml'>(LEAGUES[0].id);
   const [data, setData] = useState<LeagueData | null>(null);
   const [champStats, setChampStats] = useState<ChampStat[]>([]);
   const [players, setPlayers] = useState<PlayerStat[]>([]);
@@ -117,10 +123,22 @@ export default function LeagueTab() {
   const [playerRole, setPlayerRole] = useState('All');
 
   useEffect(() => {
+    setLoading(true);
+    setError('');
+    setData(null);
+    setChampStats([]);
+    setPlayers([]);
+    setView('standings');
+    setTeamFilter('All');
+    setChampSearch('');
+    setPlayerSearch('');
+    setPlayerTeam('All');
+    setPlayerRole('All');
+    const params = { league: leagueId };
     Promise.all([
-      axios.get<LeagueData>(`${BASE}/overview`),
-      axios.get<ChampStat[]>(`${BASE}/champstats`),
-      axios.get<PlayerStat[]>(`${BASE}/players`),
+      axios.get<LeagueData>(`${BASE}/overview`, { params }),
+      axios.get<ChampStat[]>(`${BASE}/champstats`, { params }),
+      axios.get<PlayerStat[]>(`${BASE}/players`, { params }),
     ])
       .then(([overviewRes, champRes, playersRes]) => {
         setData(overviewRes.data);
@@ -129,7 +147,7 @@ export default function LeagueTab() {
       })
       .catch(() => setError('Failed to load league data'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [leagueId]);
 
   const teams = useMemo(() => data ? ['All', ...data.standings.map(s => s.name)] : ['All'], [data]);
 
@@ -156,16 +174,15 @@ export default function LeagueTab() {
       .sort((a, b) => b.rating - a.rating);
   }, [players, playerTeam, playerRole, playerSearch]);
 
-  if (loading) return <div className="loading">Loading league data...</div>;
-  if (error) return <div className="error-msg">{error}</div>;
-  if (!data) return null;
-
   return (
     <div className="league-container">
       <div className="league-header">
-        <div className="league-title">
-          <h2 className="lg-title">Aegis League</h2>
-          <span className="lg-subtitle">{data.totalGames} games · Spring 2026</span>
+        <div className="league-selector">
+          {LEAGUES.map(l => (
+            <button key={l.id} className={`lg-view-tab ${leagueId === l.id ? 'active' : ''}`} onClick={() => setLeagueId(l.id)}>
+              {l.label}
+            </button>
+          ))}
         </div>
         <div className="league-view-tabs">
           {(['standings', 'matches', 'champions', 'players'] as LeagueView[]).map(v => (
@@ -176,7 +193,10 @@ export default function LeagueTab() {
         </div>
       </div>
 
-      {view === 'standings' && (
+      {loading && <div className="loading">Loading league data...</div>}
+      {error && <div className="error-msg">{error}</div>}
+
+      {!loading && !error && data && view === 'standings' && (
         <div className="lg-standings-view">
           <div className="lg-standings-table">
             <div className="lg-standings-head">
@@ -201,7 +221,7 @@ export default function LeagueTab() {
         </div>
       )}
 
-      {view === 'matches' && (
+      {!loading && !error && data && view === 'matches' && (
         <div className="lg-matches-view">
           <div className="lg-matches-controls">
             <select value={teamFilter} onChange={e => setTeamFilter(e.target.value)} className="region-select">
@@ -215,7 +235,7 @@ export default function LeagueTab() {
         </div>
       )}
 
-      {view === 'champions' && (
+      {!loading && !error && data && view === 'champions' && (
         <div className="lg-champs-view">
           <div className="champ-stats-header">
             <input type="text" placeholder="Search champion..." value={champSearch}
@@ -271,7 +291,7 @@ export default function LeagueTab() {
         </div>
       )}
 
-      {view === 'players' && (
+      {!loading && !error && view === 'players' && (
         <div className="lg-players-view">
           <div className="lg-players-filters">
             <input
