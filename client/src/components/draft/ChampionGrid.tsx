@@ -4,6 +4,8 @@ import { ChampionData } from '../../types';
 interface Props {
   champions: ChampionData[];
   usedChampions: Set<string>;
+  eliminatedChamps?: Set<string>;
+  hiddenChamps?: Set<string>;
   onSelect: (id: string) => void;
   disabled: boolean;
   version: string;
@@ -11,18 +13,19 @@ interface Props {
 
 const TAGS = ['All', 'Fighter', 'Tank', 'Mage', 'Assassin', 'Marksman', 'Support'];
 
-export default function ChampionGrid({ champions, usedChampions, onSelect, disabled, version }: Props) {
+export default function ChampionGrid({ champions, usedChampions, eliminatedChamps, hiddenChamps, onSelect, disabled, version }: Props) {
   const [search, setSearch] = useState('');
   const [tag, setTag] = useState('All');
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
     return champions.filter(c => {
+      if (hiddenChamps?.has(c.id)) return false;
       const matchSearch = c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q);
       const matchTag = tag === 'All' || c.tags.includes(tag);
       return matchSearch && matchTag;
     });
-  }, [champions, search, tag]);
+  }, [champions, search, tag, hiddenChamps]);
 
   return (
     <div className="champion-grid-container">
@@ -46,11 +49,13 @@ export default function ChampionGrid({ champions, usedChampions, onSelect, disab
       <div className="champion-grid">
         {filtered.map(c => {
           const used = usedChampions.has(c.id);
+          const eliminated = !used && (eliminatedChamps?.has(c.id) ?? false);
+          const blocked = used || eliminated;
           return (
             <button
               key={c.id}
-              className={`champ-btn ${used ? 'used' : ''}`}
-              onClick={() => !used && !disabled && onSelect(c.id)}
+              className={`champ-btn ${used ? 'used' : ''} ${eliminated ? 'eliminated' : ''}`}
+              onClick={() => !blocked && !disabled && onSelect(c.id)}
               title={c.name}
             >
               <img

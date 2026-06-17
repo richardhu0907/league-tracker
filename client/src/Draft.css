@@ -6,6 +6,36 @@
   height: calc(100vh - 165px);
 }
 
+/* ── Game tabs ───────────────────────────────────────── */
+.game-tabs {
+  display: flex;
+  gap: 0.25rem;
+  flex: 1;
+}
+.game-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.game-tab:hover { opacity: 0.75; }
+.game-tab.active { color: var(--blue); border-color: var(--blue); }
+.game-tab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--win);
+  flex-shrink: 0;
+}
+.game-tab.active .game-tab-dot { background: var(--blue); }
+
 /* ── Header bar ──────────────────────────────────────── */
 .draft-header {
   display: flex;
@@ -38,7 +68,7 @@
 .draft-controls {
   display: flex;
   gap: 0.5rem;
-  min-width: 110px;
+  flex: 1;
   justify-content: flex-end;
 }
 
@@ -315,6 +345,50 @@
 .champ-btn.used {
   opacity: 0.2;
   cursor: not-allowed;
+}
+.champ-btn.eliminated {
+  opacity: 0.35;
+  cursor: not-allowed;
+  position: relative;
+}
+.champ-btn.eliminated img {
+  filter: grayscale(60%) sepia(40%) hue-rotate(300deg) saturate(150%);
+}
+
+/* ── Fearless pool ───────────────────────────────────── */
+.fearless-pool {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+}
+.fearless-game-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.fearless-game-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  width: 1.5rem;
+  flex-shrink: 0;
+}
+.fearless-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.fearless-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  opacity: 0.7;
+  filter: grayscale(50%);
+  border: 1px solid var(--border);
 }
 
 /* ── Counter panel ───────────────────────────────────── */
