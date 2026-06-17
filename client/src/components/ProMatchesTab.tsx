@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { getDDragonVersion } from '../api/riot';
+import { champId } from '../utils/champId';
 import '../ProMatches.css';
 
 const BASE = `${import.meta.env.VITE_API_URL ?? ''}/api/promatches`;
@@ -129,26 +130,6 @@ function PatchDropdown({ patches, selected, onChange }: {
   );
 }
 
-const CHAMP_OVERRIDES: Record<string, string> = {
-  'Wukong': 'MonkeyKing',
-  'Renata Glasc': 'Renata',
-  "Bel'Veth": 'Belveth',
-  'Nunu & Willump': 'Nunu',
-  "Cho'Gath": 'Chogath',
-  "Vel'Koz": 'Velkoz',
-  "Kog'Maw": 'KogMaw',
-  "Rek'Sai": 'RekSai',
-  "Kha'Zix": 'Khazix',
-  "Kai'Sa": 'Kaisa',
-  "K'Sante": 'KSante',
-  "Dr. Mundo": 'DrMundo',
-};
-
-function champId(name: string): string {
-  if (!name) return '';
-  if (CHAMP_OVERRIDES[name]) return CHAMP_OVERRIDES[name];
-  return name.replace(/['\s.]/g, '');
-}
 
 function cleanName(name: string): string {
   return name.replace(/\s*\(.*\)$/, '').trim();

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { getDDragonVersion } from '../api/riot';
+import { champId } from '../utils/champId';
 
 const BASE = `${import.meta.env.VITE_API_URL ?? ''}/api/league`;
 
@@ -38,7 +39,7 @@ function ChampIcon({ name, size = 28 }: { name: string; size?: number }) {
   return (
     <img
       // strip spaces/apostrophes/dots so name matches DDragon file naming, e.g. "Bel'Veth" → "BelVeth"
-      src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${name.replace(/[\s'\.]/g, '')}.png`}
+      src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${champId(name)}.png`}
       alt={name}
       style={{ width: size, height: size, borderRadius: 4, objectFit: 'cover' }}
       onError={e => { (e.target as HTMLImageElement).style.opacity = '0'; }}
@@ -268,7 +269,7 @@ export default function LeagueTab() {
                       <td>
                         <div className="champ-cell">
                           {/* strip spaces/apostrophes/dots to match DDragon file naming */}
-                          <ChampIcon name={c.name.replace(/[\s'.]/g, '')} size={36} />
+                          <ChampIcon name={c.name} size={36} />
                           <span className="champ-cell-name">{c.name}</span>
                         </div>
                       </td>
