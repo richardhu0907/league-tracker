@@ -189,6 +189,8 @@ interface ProGame {
   draft: DraftSlot[];
 }
 
+type TaggedGame = ProGame & { _page: string };
+
 function ChampIcon({ name, size = 36, isBan = false }: { name: string; size?: number; isBan?: boolean }) {
   const v = getDDragonVersion();
   const id = champId(name);
@@ -390,7 +392,7 @@ export default function ProMatchesTab() {
 
 export function PrioPicksTab() {
   const { selected, toggle, activePages } = useSelectedTournaments();
-  const [games, setGames] = useState<ProGame[]>([]);
+  const [games, setGames] = useState<TaggedGame[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedPatches, setSelectedPatches] = useState<string[]>(['all']);
@@ -400,7 +402,8 @@ export function PrioPicksTab() {
     setError('');
     setGames([]);
     Promise.all(activePages.map(page =>
-      axios.get<ProGame[]>(`${BASE}/games`, { params: { page } }).then(r => r.data)
+      axios.get<ProGame[]>(`${BASE}/games`, { params: { page } })
+        .then(r => r.data.map(g => ({ ...g, _page: page } as TaggedGame)))
     ))
       .then(results => setGames(results.flat()))
       .catch(err => setError(err.response?.data?.error ?? 'Failed to load matches'))
@@ -452,6 +455,7 @@ export function PrioPicksTab() {
   const b23combos = [...b23Counts.values()].filter(c => c.count >= 3).sort((a, b) => b.count - a.count);
 
   const [selectedB1, setSelectedB1] = useState<string | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
 
   const answersByRole = (() => {
     if (!selectedB1) return [];
@@ -475,6 +479,17 @@ export function PrioPicksTab() {
       .sort((a, b) => b.answers.reduce((s, x) => s + x.count, 0) - a.answers.reduce((s, x) => s + x.count, 0));
   })();
 
+  const answerGames = (() => {
+    if (!selectedB1 || !selectedAnswer) return [];
+    return filtered.filter(game => {
+      const b1 = game.draft.find(d => d.slot === 7);
+      if (b1?.champion !== selectedB1) return false;
+      const role = b1.role ?? '';
+      const opposing = game.draft.find(d => d.action === 'pick' && d.team === 2 && d.role === role);
+      return opposing?.champion === selectedAnswer;
+    });
+  })();
+
   return (
     <div className="pm-container">
       <div className="pp-filters">
@@ -486,7 +501,9 @@ export function PrioPicksTab() {
       {error && <div className="error-msg">{error}</div>}
 
       {!loading && !error && sorted.length > 0 && (
-        selectedB1 ? (
+        selectedB1 && selectedAnswer ? (
+          <GameList games={answerGames} onBack={() => setSelectedAnswer(null)} />
+        ) : selectedB1 ? (
           <div>
             <button className="pp-back-btn" onClick={() => setSelectedB1(null)}>
               ← Back
@@ -500,7 +517,7 @@ export function PrioPicksTab() {
                 <div className="pp-section-label">{selectedB1} {role} answers</div>
                 <div className="pp-answers-grid">
                   {answers.map(({ champ, count }) => (
-                    <div key={champ} className="pp-answer-card">
+                    <div key={champ} className="pp-answer-card pp-row-clickable" onClick={() => setSelectedAnswer(champ)}>
                       <ChampIcon name={champ} size={52} />
                       <span className="pp-answer-name">{champ}</span>
                       <span className="pp-answer-count">{count}×</span>
@@ -564,20 +581,82 @@ export function PrioPicksTab() {
   );
 }
 
+type ComboType = 'Mid/Jg' | 'Bot/Sup' | 'Jg/Sup';
+type MatchupKind = 'into' | 'before' | 'general';
+
+const COMBO_ROLES: Record<ComboType, [string, string]> = {
+  'Mid/Jg':  ['Mid', 'Jungle'],
+  'Bot/Sup': ['Bot', 'Support'],
+  'Jg/Sup':  ['Jungle', 'Support'],
+};
+
+function GameList({ games, onBack }: { games: TaggedGame[]; onBack: () => void }) {
+  return (
+    <div>
+      <button className="pp-back-btn" onClick={onBack}>← Back</button>
+      <div className="pp-game-list">
+        {games.map((game, i) => {
+          const tourney = TOURNAMENTS.find(t => t.page === game._page)?.label ?? game._page;
+          return (
+            <div key={i} className="pp-game-row">
+              <span className="pp-game-tourney">{tourney}</span>
+              <span className="pp-game-phase">{game.phase}</span>
+              <span className="pp-game-teams">{cleanName(game.team1)} vs {cleanName(game.team2)}</span>
+              <span className="pp-game-num">{gameLabel(game.score)}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function MatchupSection({
+  label, pairs, onSelect,
+}: {
+  label: string;
+  pairs: { a: string; b: string; count: number }[];
+  onSelect: (a: string, b: string) => void;
+}) {
+  if (pairs.length === 0) return null;
+  const total = pairs.reduce((s, x) => s + x.count, 0);
+  return (
+    <div className="pp-answers-section">
+      <div className="pp-section-label">{label} ({total} games)</div>
+      <div className="pp-answers-grid">
+        {pairs.map(({ a, b, count }) => (
+          <div key={`${a}|||${b}`} className="pp-answer-card pp-row-clickable" onClick={() => onSelect(a, b)}>
+            <div className="pp-combo-card-icons">
+              <ChampIcon name={a} size={36} />
+              <ChampIcon name={b} size={36} />
+            </div>
+            <span className="pp-answer-name">{a}</span>
+            <span className="pp-combo-card-b">{b}</span>
+            <span className="pp-answer-count">{count}×</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function CombosTab() {
   const { selected, toggle, activePages } = useSelectedTournaments();
-  const [games, setGames] = useState<ProGame[]>([]);
+  const [games, setGames] = useState<TaggedGame[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedPatches, setSelectedPatches] = useState<string[]>(['all']);
-  const [comboType, setComboType] = useState<'Mid/Jg' | 'Bot/Sup' | 'Jg/Sup'>('Mid/Jg');
+  const [comboType, setComboType] = useState<ComboType>('Mid/Jg');
+  const [selectedCombo, setSelectedCombo] = useState<{ a: string; b: string } | null>(null);
+  const [selectedMatchup, setSelectedMatchup] = useState<{ a: string; b: string; kind: MatchupKind } | null>(null);
 
   useEffect(() => {
     setLoading(true);
     setError('');
     setGames([]);
     Promise.all(activePages.map(page =>
-      axios.get<ProGame[]>(`${BASE}/games`, { params: { page } }).then(r => r.data)
+      axios.get<ProGame[]>(`${BASE}/games`, { params: { page } })
+        .then(r => r.data.map(g => ({ ...g, _page: page } as TaggedGame)))
     ))
       .then(results => setGames(results.flat()))
       .catch(err => setError(err.response?.data?.error ?? 'Failed to load matches'))
@@ -597,15 +676,9 @@ export function CombosTab() {
 
   const filtered = selectedPatches.includes('all') ? games : games.filter(g => selectedPatches.includes(g.patch));
 
-  const COMBO_ROLES: Record<'Mid/Jg' | 'Bot/Sup' | 'Jg/Sup', [string, string]> = {
-    'Mid/Jg':  ['Mid', 'Jungle'],
-    'Bot/Sup': ['Bot', 'Support'],
-    'Jg/Sup':  ['Jungle', 'Support'],
-  };
-
   const [roleA, roleB] = COMBO_ROLES[comboType];
-  const comboCounts = new Map<string, { a: string; b: string; count: number }>();
 
+  const comboCounts = new Map<string, { a: string; b: string; count: number }>();
   for (const game of filtered) {
     for (const teamNum of [1, 2] as const) {
       const teamPicks = game.draft.filter(d => d.action === 'pick' && d.team === teamNum);
@@ -623,8 +696,93 @@ export function CombosTab() {
       }
     }
   }
-
   const combos = [...comboCounts.values()].sort((a, b) => b.count - a.count);
+
+  const matchupSections = (() => {
+    if (!selectedCombo) return null;
+    const comboSet = new Set([selectedCombo.a, selectedCombo.b]);
+
+    const into    = new Map<string, { a: string; b: string; count: number }>();
+    const before  = new Map<string, { a: string; b: string; count: number }>();
+    const general = new Map<string, { a: string; b: string; count: number }>();
+
+    for (const game of filtered) {
+      for (const teamNum of [1, 2] as const) {
+        const teamPicks = game.draft.filter(d => d.action === 'pick' && d.team === teamNum);
+        const byRole = new Map<string, DraftSlot>();
+        for (const p of teamPicks) { if (p.role) byRole.set(p.role, p); }
+
+        const pickA = byRole.get(roleA);
+        const pickB = byRole.get(roleB);
+        if (!pickA || !pickB) continue;
+        if (!comboSet.has(pickA.champion) || !comboSet.has(pickB.champion)) continue;
+
+        const enemyNum = teamNum === 1 ? 2 : 1;
+        const enemyPicks = game.draft.filter(d => d.action === 'pick' && d.team === enemyNum);
+        const enemyByRole = new Map<string, DraftSlot>();
+        for (const p of enemyPicks) { if (p.role) enemyByRole.set(p.role, p); }
+
+        const enemyA = enemyByRole.get(roleA);
+        const enemyB = enemyByRole.get(roleB);
+        if (!enemyA || !enemyB) continue;
+
+        const comboMin = Math.min(pickA.slot, pickB.slot);
+        const comboMax = Math.max(pickA.slot, pickB.slot);
+        const enemyMin = Math.min(enemyA.slot, enemyB.slot);
+        const enemyMax = Math.max(enemyA.slot, enemyB.slot);
+
+        const [ea, eb] = [enemyA.champion, enemyB.champion].sort();
+        const key = `${ea}|||${eb}`;
+
+        let section: typeof into;
+        if (enemyMin > comboMax) section = into;
+        else if (enemyMax < comboMin) section = before;
+        else section = general;
+
+        if (!section.has(key)) section.set(key, { a: ea, b: eb, count: 0 });
+        section.get(key)!.count++;
+      }
+    }
+
+    const sort = (m: typeof into) => [...m.values()].sort((x, y) => y.count - x.count);
+    return { into: sort(into), before: sort(before), general: sort(general) };
+  })();
+
+  const matchupGames = (() => {
+    if (!selectedCombo || !selectedMatchup) return [];
+    const comboSet   = new Set([selectedCombo.a, selectedCombo.b]);
+    const matchupSet = new Set([selectedMatchup.a, selectedMatchup.b]);
+    const result: TaggedGame[] = [];
+    for (const game of filtered) {
+      for (const teamNum of [1, 2] as const) {
+        const teamPicks = game.draft.filter(d => d.action === 'pick' && d.team === teamNum);
+        const byRole = new Map<string, DraftSlot>();
+        for (const p of teamPicks) { if (p.role) byRole.set(p.role, p); }
+        const pickA = byRole.get(roleA);
+        const pickB = byRole.get(roleB);
+        if (!pickA || !pickB) continue;
+        if (!comboSet.has(pickA.champion) || !comboSet.has(pickB.champion)) continue;
+        const enemyNum = teamNum === 1 ? 2 : 1;
+        const enemyPicks = game.draft.filter(d => d.action === 'pick' && d.team === enemyNum);
+        const enemyByRole = new Map<string, DraftSlot>();
+        for (const p of enemyPicks) { if (p.role) enemyByRole.set(p.role, p); }
+        const enemyA = enemyByRole.get(roleA);
+        const enemyB = enemyByRole.get(roleB);
+        if (!enemyA || !enemyB) continue;
+        if (!matchupSet.has(enemyA.champion) || !matchupSet.has(enemyB.champion)) continue;
+        const comboMin = Math.min(pickA.slot, pickB.slot);
+        const comboMax = Math.max(pickA.slot, pickB.slot);
+        const enemyMin = Math.min(enemyA.slot, enemyB.slot);
+        const enemyMax = Math.max(enemyA.slot, enemyB.slot);
+        let kind: MatchupKind;
+        if (enemyMin > comboMax) kind = 'into';
+        else if (enemyMax < comboMin) kind = 'before';
+        else kind = 'general';
+        if (kind === selectedMatchup.kind) result.push(game);
+      }
+    }
+    return result;
+  })();
 
   return (
     <div className="pm-container">
@@ -636,7 +794,7 @@ export function CombosTab() {
             <button
               key={type}
               className={`pp-type-tab${comboType === type ? ' active' : ''}`}
-              onClick={() => setComboType(type)}
+              onClick={() => { setComboType(type); setSelectedCombo(null); setSelectedMatchup(null); }}
             >
               {type}
             </button>
@@ -648,22 +806,81 @@ export function CombosTab() {
       {error && <div className="error-msg">{error}</div>}
 
       {!loading && !error && (
-        <div className="pp-list">
-          {combos.length === 0
-            ? <div className="loading">No combos found.</div>
-            : combos.map(({ a, b, count }, i) => (
-              <div key={`${a}|||${b}`} className="pp-row">
-                <span className="pp-rank">{i + 1}</span>
-                <ChampIcon name={a} size={36} />
-                <span className="pp-name">{a}</span>
-                <span className="pp-combo-sep">+</span>
-                <ChampIcon name={b} size={36} />
-                <span className="pp-name">{b}</span>
-                <span className="pp-count">{count}×</span>
-              </div>
-            ))
-          }
-        </div>
+        selectedCombo && selectedMatchup ? (
+          <div>
+            <button className="pp-back-btn" onClick={() => setSelectedMatchup(null)}>← Back</button>
+            <div className="pp-detail-header">
+              <ChampIcon name={selectedCombo.a} size={40} />
+              <ChampIcon name={selectedCombo.b} size={40} />
+              <span className="pp-detail-name" style={{ fontSize: '1rem' }}>
+                {selectedCombo.a} + {selectedCombo.b}
+              </span>
+              <span style={{ color: 'var(--text-muted)', margin: '0 6px' }}>vs</span>
+              <ChampIcon name={selectedMatchup.a} size={40} />
+              <ChampIcon name={selectedMatchup.b} size={40} />
+              <span className="pp-detail-name" style={{ fontSize: '1rem' }}>
+                {selectedMatchup.a} + {selectedMatchup.b}
+              </span>
+            </div>
+            <div className="pp-game-list">
+              {matchupGames.map((game, i) => {
+                const tourney = TOURNAMENTS.find(t => t.page === game._page)?.label ?? game._page;
+                return (
+                  <div key={i} className="pp-game-row">
+                    <span className="pp-game-tourney">{tourney}</span>
+                    <span className="pp-game-phase">{game.phase}</span>
+                    <span className="pp-game-teams">{cleanName(game.team1)} vs {cleanName(game.team2)}</span>
+                    <span className="pp-game-num">{gameLabel(game.score)}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : selectedCombo && matchupSections ? (
+          <div>
+            <button className="pp-back-btn" onClick={() => { setSelectedCombo(null); setSelectedMatchup(null); }}>← Back</button>
+            <div className="pp-detail-header">
+              <ChampIcon name={selectedCombo.a} size={48} />
+              <ChampIcon name={selectedCombo.b} size={48} />
+              <div className="pp-detail-name">{selectedCombo.a} + {selectedCombo.b}</div>
+            </div>
+            <MatchupSection
+              label={`Picked into ${selectedCombo.a} + ${selectedCombo.b}`}
+              pairs={matchupSections.into}
+              onSelect={(a, b) => setSelectedMatchup({ a, b, kind: 'into' })}
+            />
+            <MatchupSection
+              label={`Picked before ${selectedCombo.a} + ${selectedCombo.b}`}
+              pairs={matchupSections.before}
+              onSelect={(a, b) => setSelectedMatchup({ a, b, kind: 'before' })}
+            />
+            <MatchupSection
+              label="General Matchup"
+              pairs={matchupSections.general}
+              onSelect={(a, b) => setSelectedMatchup({ a, b, kind: 'general' })}
+            />
+            {matchupSections.into.length === 0 && matchupSections.before.length === 0 && matchupSections.general.length === 0 && (
+              <div className="loading">No matchup data found.</div>
+            )}
+          </div>
+        ) : (
+          <div className="pp-list">
+            {combos.length === 0
+              ? <div className="loading">No combos found.</div>
+              : combos.map(({ a, b, count }, i) => (
+                <div key={`${a}|||${b}`} className="pp-row pp-row-clickable" onClick={() => { setSelectedCombo({ a, b }); setSelectedMatchup(null); }}>
+                  <span className="pp-rank">{i + 1}</span>
+                  <ChampIcon name={a} size={36} />
+                  <span className="pp-name">{a}</span>
+                  <span className="pp-combo-sep">+</span>
+                  <ChampIcon name={b} size={36} />
+                  <span className="pp-name">{b}</span>
+                  <span className="pp-count">{count}×</span>
+                </div>
+              ))
+            }
+          </div>
+        )
       )}
     </div>
   );
@@ -671,18 +888,20 @@ export function CombosTab() {
 
 export function CounterPicksTab() {
   const { selected, toggle, activePages } = useSelectedTournaments();
-  const [games, setGames] = useState<ProGame[]>([]);
+  const [games, setGames] = useState<TaggedGame[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedPatches, setSelectedPatches] = useState<string[]>(['all']);
   const [selectedChamp, setSelectedChamp] = useState<string | null>(null);
+  const [selectedCounter, setSelectedCounter] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
     setError('');
     setGames([]);
     Promise.all(activePages.map(page =>
-      axios.get<ProGame[]>(`${BASE}/games`, { params: { page } }).then(r => r.data)
+      axios.get<ProGame[]>(`${BASE}/games`, { params: { page } })
+        .then(r => r.data.map(g => ({ ...g, _page: page } as TaggedGame)))
     ))
       .then(results => setGames(results.flat()))
       .catch(err => setError(err.response?.data?.error ?? 'Failed to load matches'))
@@ -752,6 +971,24 @@ export function CounterPicksTab() {
       );
   })();
 
+  const counterGames = (() => {
+    if (!selectedChamp || !selectedCounter) return [];
+    return filtered.filter(game => {
+      const picks = game.draft.filter(d => d.action === 'pick' && d.role);
+      const byRole = new Map<string, DraftSlot[]>();
+      for (const p of picks) {
+        if (!byRole.has(p.role!)) byRole.set(p.role!, []);
+        byRole.get(p.role!)!.push(p);
+      }
+      for (const rolePicks of byRole.values()) {
+        if (rolePicks.length < 2) continue;
+        rolePicks.sort((a, b) => a.slot - b.slot);
+        if (rolePicks[0].champion === selectedChamp && rolePicks[1].champion === selectedCounter) return true;
+      }
+      return false;
+    });
+  })();
+
   return (
     <div className="pm-container">
       <div className="pp-filters">
@@ -763,7 +1000,9 @@ export function CounterPicksTab() {
       {error && <div className="error-msg">{error}</div>}
 
       {!loading && !error && sortedBlinds.length > 0 && (
-        selectedChamp ? (
+        selectedChamp && selectedCounter ? (
+          <GameList games={counterGames} onBack={() => setSelectedCounter(null)} />
+        ) : selectedChamp ? (
           <div>
             <button className="pp-back-btn" onClick={() => setSelectedChamp(null)}>← Back</button>
             <div className="pp-detail-header">
@@ -775,7 +1014,7 @@ export function CounterPicksTab() {
                 <div className="pp-section-label">{selectedChamp} {role} — countered by</div>
                 <div className="pp-answers-grid">
                   {counters.map(({ champ, count }) => (
-                    <div key={champ} className="pp-answer-card">
+                    <div key={champ} className="pp-answer-card pp-row-clickable" onClick={() => setSelectedCounter(champ)}>
                       <ChampIcon name={champ} size={52} />
                       <span className="pp-answer-name">{champ}</span>
                       <span className="pp-answer-count">{count}×</span>

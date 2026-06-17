@@ -86,6 +86,37 @@
 .draft-btn:not(:disabled):hover { opacity: 0.75; }
 .draft-btn.reset { color: var(--loss); border-color: var(--loss); }
 
+/* ── Role pairing hints ──────────────────────────────── */
+.pairing-hints-col {
+  position: absolute;
+  bottom: 4px;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: flex-end;
+  z-index: 10;
+}
+.blue-pairing-hints { right: calc(100% + 8px); }
+.red-pairing-hints  { left:  calc(100% + 8px); }
+
+.pairing-hint-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 72px;
+}
+
+.pairing-hint-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 1px;
+}
+
 /* ── Patch filter dropdown ───────────────────────────── */
 .patch-filter {
   position: relative;
@@ -395,11 +426,17 @@
   flex-shrink: 0;
 }
 
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .grid-search {
   background: var(--surface2);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 0.45rem 0.75rem;
+  padding: 0.45rem 1.6rem 0.45rem 0.75rem;
   border-radius: 6px;
   font-size: 0.8rem;
   outline: none;
@@ -408,6 +445,21 @@
 }
 .grid-search:focus { border-color: var(--blue); }
 .grid-search::placeholder { color: var(--text-muted); }
+
+.search-clear-btn {
+  position: absolute;
+  right: 6px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+}
+.search-clear-btn:hover { color: var(--text); }
 
 .tag-filters {
   display: flex;
@@ -533,6 +585,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+}
+.counter-minimized {
+  padding-bottom: 0.5rem;
 }
 
 .counter-header {

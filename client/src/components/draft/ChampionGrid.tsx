@@ -30,14 +30,19 @@ export default function ChampionGrid({ champions, usedChampions, eliminatedChamp
   return (
     <div className="champion-grid-container">
       <div className="grid-filters">
-        <input
-          type="text"
-          placeholder="Search champion..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="grid-search"
-          autoComplete="off"
-        />
+        <div className="search-input-wrap">
+          <input
+            type="text"
+            placeholder="Search champion..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="grid-search"
+            autoComplete="off"
+          />
+          {search && (
+            <button className="search-clear-btn" onClick={() => setSearch('')} tabIndex={-1}>×</button>
+          )}
+        </div>
         <div className="tag-filters">
           {TAGS.map(t => (
             <button key={t} onClick={() => setTag(t)} className={`tag-btn ${tag === t ? 'active' : ''}`}>

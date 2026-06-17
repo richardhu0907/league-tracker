@@ -217,44 +217,28 @@ export default function DraftTab() {
     return [...r12.values()].sort((a, b) => b.count - a.count).slice(0, 15);
   }, [filteredGames]);
 
-  const proCounters = useMemo(() => {
-    if (!autoChamp) return [];
-    const targetId = autoChamp.id;
-    const countMap = new Map<string, number>();
-    for (const game of filteredGames) {
-      const picks = game.draft.filter(d => d.slot >= 7);
-      const champPick = picks.find(d => champId(d.champion) === targetId && d.role && d.team != null);
-      if (!champPick) continue;
-      // Only count picks made AFTER this champion (true counter picks, not blind picks)
-      const opposing = picks.find(d =>
-        d.team !== champPick.team &&
-        d.role === champPick.role &&
-        d.slot > champPick.slot
-      );
-      if (opposing?.champion) {
-        const id = champId(opposing.champion);
-        if (id) countMap.set(id, (countMap.get(id) ?? 0) + 1);
+  const champRoleMap = useMemo(() => {
+    const roleCounts = new Map<string, Map<string, number>>();
+    for (const game of rawGames) {
+      for (const pick of game.draft) {
+        if (pick.slot < 7 || !pick.role) continue;
+        const id = champId(pick.champion);
+        if (!id) continue;
+        if (!roleCounts.has(id)) roleCounts.set(id, new Map());
+        const m = roleCounts.get(id)!;
+        m.set(pick.role, (m.get(pick.role) ?? 0) + 1);
       }
     }
-    return [...countMap.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([id, count]) => ({ id, count }));
-  }, [autoChamp, filteredGames]);
-
-  const b23Combos = useMemo(() => {
-    const b23 = new Map<string, { a: string; b: string; count: number }>();
-    for (const game of filteredGames) {
-      const ia = champId(game.draft.find(d => d.slot === 10)?.champion ?? '');
-      const ib = champId(game.draft.find(d => d.slot === 11)?.champion ?? '');
-      if (ia && ib) {
-        const key = [...[ia, ib]].sort().join('|||');
-        if (!b23.has(key)) b23.set(key, { a: ia, b: ib, count: 0 });
-        b23.get(key)!.count++;
+    const result = new Map<string, string>();
+    for (const [id, roles] of roleCounts) {
+      let maxRole = '', maxCount = 0;
+      for (const [role, cnt] of roles) {
+        if (cnt > maxCount) { maxCount = cnt; maxRole = role; }
       }
+      if (maxRole) result.set(id, maxRole);
     }
-    return [...b23.values()].sort((a, b) => b.count - a.count).slice(0, 15);
-  }, [filteredGames]);
+    return result;
+  }, [rawGames]);
 
   const draft = gameDrafts[currentGame];
   const step  = gameSteps[currentGame];
@@ -300,6 +284,67 @@ export default function DraftTab() {
   // usedChampions removes the editing champ so the grid shows it as available for swap
   const usedChampions = new Set(allUsedChampions);
   if (editingChamp) usedChampions.delete(editingChamp);
+
+  const [bluePairingHints, redPairingHints] = useMemo(() => {
+    const getTopPairs = (anchorId: string, anchorRole: string, targetRole: string) => {
+      const countMap = new Map<string, number>();
+      for (const game of filteredGames) {
+        for (const teamNum of [1, 2] as const) {
+          const picks = game.draft.filter(d => d.slot >= 7 && d.team === teamNum);
+          const byRole = new Map<string, string>();
+          for (const p of picks) { if (p.role) byRole.set(p.role, p.champion); }
+          const anchor = byRole.get(anchorRole);
+          if (!anchor || champId(anchor) !== anchorId) continue;
+          const partner = byRole.get(targetRole);
+          if (partner) {
+            const pid = champId(partner);
+            if (pid) countMap.set(pid, (countMap.get(pid) ?? 0) + 1);
+          }
+        }
+      }
+      return [...countMap.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .filter(([id]) => !allUsedChampions.has(id) && !eliminatedChamps.has(id))
+        .slice(0, 5)
+        .map(([id, count]) => ({ id, count }));
+    };
+
+    const computeHints = (picks: (string | null)[]) => {
+      const hints: { label: string; picks: { id: string; count: number }[] }[] = [];
+      const botId = picks.find(id => id && champRoleMap.get(id) === 'Bot') ?? null;
+      const supId = picks.find(id => id && champRoleMap.get(id) === 'Support') ?? null;
+      const midId = picks.find(id => id && champRoleMap.get(id) === 'Mid') ?? null;
+      const jgId  = picks.find(id => id && champRoleMap.get(id) === 'Jungle') ?? null;
+
+      if (supId && !botId) {
+        const ps = getTopPairs(supId, 'Support', 'Bot');
+        if (ps.length) hints.push({ label: 'Bot Pairings', picks: ps });
+      }
+      if (!supId) {
+        const anchor = botId ?? jgId;
+        const role = botId ? 'Bot' : jgId ? 'Jungle' : null;
+        if (anchor && role) {
+          const ps = getTopPairs(anchor, role, 'Support');
+          if (ps.length) hints.push({ label: 'Sup Pairings', picks: ps });
+        }
+      }
+      if (jgId && !midId) {
+        const ps = getTopPairs(jgId, 'Jungle', 'Mid');
+        if (ps.length) hints.push({ label: 'Mid Pairings', picks: ps });
+      }
+      if (!jgId) {
+        const anchor = midId ?? supId;
+        const role = midId ? 'Mid' : supId ? 'Support' : null;
+        if (anchor && role) {
+          const ps = getTopPairs(anchor, role, 'Jungle');
+          if (ps.length) hints.push({ label: 'Jg Pairings', picks: ps });
+        }
+      }
+      return hints;
+    };
+
+    return [computeHints(draft.bluePicks), computeHints(draft.redPicks)];
+  }, [draft.bluePicks, draft.redPicks, champRoleMap, filteredGames, allUsedChampions, eliminatedChamps]);
 
   const handleSlotClick = (team: 'blue' | 'red', type: 'ban' | 'pick', slot: number) => {
     if (editingSlot?.team === team && editingSlot.type === type && editingSlot.slot === slot) {
@@ -370,21 +415,6 @@ export default function DraftTab() {
     setAutoChamp(null);
   };
 
-  const handleB23Pick = (idA: string, idB: string) => {
-    if (isDone || !current) return;
-    if (current.team !== 'blue' || current.type !== 'pick' || current.slot !== 1) return;
-    const nextStep = DRAFT_ORDER[step + 1];
-    if (!nextStep || nextStep.team !== 'blue' || nextStep.type !== 'pick' || nextStep.slot !== 2) return;
-    if (usedChampions.has(idA) || usedChampions.has(idB) || idA === idB) return;
-    if (eliminatedChamps.has(idA) || eliminatedChamps.has(idB)) return;
-    updateDraft(prev => ({
-      ...prev,
-      bluePicks: [prev.bluePicks[0], idA, idB, prev.bluePicks[3], prev.bluePicks[4]],
-    }));
-    updateStep(s => s + 2);
-    setAutoChamp(null);
-  };
-
   const handleUndo = () => {
     if (step === 0) return;
     const prev = DRAFT_ORDER[step - 1];
@@ -436,15 +466,6 @@ export default function DraftTab() {
 
   const r12Suggestions = activeRedPick === 0
     ? r12Combos
-        .filter(({ a, b }) =>
-          !allUsedChampions.has(a) && !allUsedChampions.has(b) &&
-          !eliminatedChamps.has(a) && !eliminatedChamps.has(b)
-        )
-        .slice(0, 5)
-    : [];
-
-  const b23Suggestions = activeBluePick === 1
-    ? b23Combos
         .filter(({ a, b }) =>
           !allUsedChampions.has(a) && !allUsedChampions.has(b) &&
           !eliminatedChamps.has(a) && !eliminatedChamps.has(b)
@@ -522,16 +543,17 @@ export default function DraftTab() {
               ))}
             </div>
           )}
-          {b23Suggestions.length > 0 && (
-            <div className="b23-hints-col">
-              <span className="b1-hints-label">B2/B3 Prio</span>
-              {b23Suggestions.map(({ a, b, count }) => (
-                <div key={`${a}|||${b}`} className="r12-hint" onClick={() => handleB23Pick(a, b)}>
-                  <div className="r12-hint-icons">
-                    <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${a}.png`} alt={a} title={champMap.get(a) ?? a} />
-                    <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${b}.png`} alt={b} title={champMap.get(b) ?? b} />
-                  </div>
-                  <span className="b1-hint-count">{count}×</span>
+          {bluePairingHints.length > 0 && activeBluePick !== -1 && (
+            <div className="pairing-hints-col blue-pairing-hints">
+              {bluePairingHints.map(hint => (
+                <div key={hint.label} className="pairing-hint-box">
+                  <span className="pairing-hint-label">{hint.label}</span>
+                  {hint.picks.map(({ id, count }) => (
+                    <div key={id} className="b1-hint" onClick={() => handleSelect(id)} title={champMap.get(id) ?? id}>
+                      <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${id}.png`} alt={id} />
+                      <span className="b1-hint-count">{count}×</span>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
@@ -564,8 +586,9 @@ export default function DraftTab() {
             autoAction={autoAction}
             onSelect={handleSelect}
             usedChampions={usedChampions}
-            proCounters={proCounters}
+            filteredGames={filteredGames}
             champMap={champMap}
+            minimized={isDone || step === 6 || step === 16}
           />
         </div>
 
@@ -580,6 +603,21 @@ export default function DraftTab() {
                     <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${b}.png`} alt={b} title={champMap.get(b) ?? b} />
                   </div>
                   <span className="b1-hint-count">{count}×</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {redPairingHints.length > 0 && activeRedPick !== -1 && (
+            <div className="pairing-hints-col red-pairing-hints">
+              {redPairingHints.map(hint => (
+                <div key={hint.label} className="pairing-hint-box">
+                  <span className="pairing-hint-label">{hint.label}</span>
+                  {hint.picks.map(({ id, count }) => (
+                    <div key={id} className="b1-hint" onClick={() => handleSelect(id)} title={champMap.get(id) ?? id}>
+                      <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${id}.png`} alt={id} />
+                      <span className="b1-hint-count">{count}×</span>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
