@@ -9663,6 +9663,846 @@
   ],
   "LCS 2026 Spring Playoffs": [
     {
+      "phase": "Finals",
+      "team1": "LYON (2024 American Team)",
+      "team2": "Team Liquid",
+      "score": "3 - 0",
+      "winner": "LYON (2024 American Team)",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lee Sin"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Vi"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Jayce"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Yone"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ryze"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Nocturne",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Xayah",
+          "role": "Bot"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Rakan",
+          "role": "Support"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Yunara",
+          "role": "Bot"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lulu",
+          "role": "Support"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Viktor",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Sylas"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Ornn"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ahri"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Ambessa"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Shyvana",
+          "role": "Jungle"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rumble",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Galio",
+          "role": "Mid"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Yorick",
+          "role": "Top"
+        }
+      ]
+    },
+    {
+      "phase": "Finals",
+      "team1": "Team Liquid",
+      "team2": "LYON (2024 American Team)",
+      "score": "0 - 2",
+      "winner": "LYON (2024 American Team)",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Lee Sin"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Karma"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Rakan"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Seraphine"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Cassiopeia",
+          "role": "Mid"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Senna",
+          "role": "Bot"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Nautilus",
+          "role": "Support"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rell",
+          "role": "Support"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jarvan IV",
+          "role": "Jungle"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "LeBlanc",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ziggs"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Miss Fortune"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Rumble"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Wukong",
+          "role": "Jungle"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Corki",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Gragas",
+          "role": "Top"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "K'Sante",
+          "role": "Top"
+        }
+      ]
+    },
+    {
+      "phase": "Finals",
+      "team1": "Team Liquid",
+      "team2": "LYON (2024 American Team)",
+      "score": "0 - 1",
+      "winner": "LYON (2024 American Team)",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Lee Sin"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Jarvan IV"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Rakan"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Varus",
+          "role": "Bot"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ezreal",
+          "role": "Bot"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Xin Zhao",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Orianna",
+          "role": "Mid"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Trundle",
+          "role": "Jungle"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Akali",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nautilus"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Karma"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Poppy"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Alistar",
+          "role": "Support"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Neeko",
+          "role": "Support"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Sion",
+          "role": "Top"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Shen",
+          "role": "Top"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "Cloud9",
+      "team2": "Team Liquid",
+      "score": "0 - 3",
+      "winner": "Team Liquid",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Karma"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Varus"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Akali"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lulu",
+          "role": "Support"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Neeko",
+          "role": "Support"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Viktor",
+          "role": "Mid"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Yunara",
+          "role": "Bot"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Twisted Fate",
+          "role": "Mid"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ezreal",
+          "role": "Bot"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Renekton"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Jayce"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Jax"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Naafiri",
+          "role": "Jungle"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Sejuani",
+          "role": "Jungle"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ambessa",
+          "role": "Top"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Shen",
+          "role": "Top"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "Cloud9",
+      "team2": "Team Liquid",
+      "score": "0 - 2",
+      "winner": "Team Liquid",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Akali"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Karma"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Varus"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jarvan IV",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Caitlyn",
+          "role": "Bot"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Bard",
+          "role": "Support"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Nautilus",
+          "role": "Support"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ziggs",
+          "role": "Mid"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Trundle",
+          "role": "Jungle"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Annie"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "LeBlanc"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Senna"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "K'Sante"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Yone",
+          "role": "Mid"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jhin",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rumble",
+          "role": "Top"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ornn",
+          "role": "Top"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "Cloud9",
+      "team2": "Team Liquid",
+      "score": "0 - 1",
+      "winner": "Team Liquid",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Karma"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Bard"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Akali"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Nocturne",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ryze",
+          "role": "Mid"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Xayah",
+          "role": "Bot"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ashe",
+          "role": "Bot"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Seraphine",
+          "role": "Support"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Rakan",
+          "role": "Support"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Annie"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Jarvan IV"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ziggs"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Lee Sin",
+          "role": "Jungle"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Sion",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Anivia",
+          "role": "Mid"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Zaahen",
+          "role": "Top"
+        }
+      ]
+    },
+    {
       "phase": "Round 2",
       "team1": "LYON (2024 American Team)",
       "team2": "Cloud9",
@@ -56571,6 +57411,1126 @@
   ],
   "LPL 2026 Split 2 Playoffs": [
     {
+      "phase": "Finals",
+      "team1": "Top Esports",
+      "team2": "Bilibili Gaming",
+      "score": "0 - 3",
+      "winner": "Bilibili Gaming",
+      "patch": "26.10",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Ambessa"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ezreal"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ashe",
+          "role": "Bot"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Sion",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Seraphine",
+          "role": "Support"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Wukong",
+          "role": "Jungle"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lulu",
+          "role": "Support"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Senna",
+          "role": "Bot"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Akali"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Xin Zhao"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Viktor",
+          "role": "Mid"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Olaf",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Hwei",
+          "role": "Mid"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Pantheon",
+          "role": "Jungle"
+        }
+      ]
+    },
+    {
+      "phase": "Finals",
+      "team1": "Top Esports",
+      "team2": "Bilibili Gaming",
+      "score": "0 - 2",
+      "winner": "Bilibili Gaming",
+      "patch": "26.10",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Seraphine"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ezreal"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Sion"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jayce",
+          "role": "Top"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "K'Sante",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Lee Sin",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Trundle",
+          "role": "Jungle"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Aurora",
+          "role": "Mid"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Annie",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Karma"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Rakan"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nami"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ziggs",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Nautilus",
+          "role": "Support"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jhin",
+          "role": "Bot"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Shen",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Finals",
+      "team1": "Top Esports",
+      "team2": "Bilibili Gaming",
+      "score": "0 - 1",
+      "winner": "Bilibili Gaming",
+      "patch": "26.10",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Seraphine"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ezreal"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Trundle"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Lee Sin"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rumble",
+          "role": "Top"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Varus",
+          "role": "Bot"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Jarvan IV",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Vi",
+          "role": "Jungle"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ryze",
+          "role": "Mid"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Cassiopeia",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Ambessa"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Yunara"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Sion"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Yorick",
+          "role": "Top"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Sivir",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Alistar",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Camille",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Team WE",
+      "team2": "Bilibili Gaming",
+      "score": "2 - 3",
+      "winner": "Bilibili Gaming",
+      "patch": "26.10",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Varus"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Yone"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Vi",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Corki",
+          "role": "Bot"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Nami",
+          "role": "Support"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Zeri",
+          "role": "Bot"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Yuumi",
+          "role": "Support"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Akali",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Galio"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Malphite"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Taliyah"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Skarner"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Maokai",
+          "role": "Jungle"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Udyr",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ambessa",
+          "role": "Mid"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Jax",
+          "role": "Top"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Bilibili Gaming",
+      "team2": "Team WE",
+      "score": "2 - 2",
+      "winner": "Bilibili Gaming",
+      "patch": "26.10",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Olaf"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Varus"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Akali"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Yone"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Naafiri",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Poppy",
+          "role": "Jungle"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Twisted Fate",
+          "role": "Mid"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Mel",
+          "role": "Mid"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Caitlyn",
+          "role": "Bot"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Renekton",
+          "role": "Top"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Jax"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nami"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Aphelios",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Zaahen",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Elise",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Nautilus",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Bilibili Gaming",
+      "team2": "Team WE",
+      "score": "1 - 2",
+      "winner": "Team WE",
+      "patch": "26.10",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Vayne"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Vi"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Varus"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rumble",
+          "role": "Top"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ornn",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Trundle",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Wukong",
+          "role": "Jungle"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Aurora",
+          "role": "Mid"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Viktor",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nautilus"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nami"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Lulu",
+          "role": "Support"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Yunara",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rakan",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Jinx",
+          "role": "Bot"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Team WE",
+      "team2": "Bilibili Gaming",
+      "score": "1 - 1",
+      "winner": "Team WE",
+      "patch": "26.10",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Varus"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Vi"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Rumble"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ezreal",
+          "role": "Bot"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Jayce",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Bard",
+          "role": "Support"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Orianna",
+          "role": "Mid"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Neeko",
+          "role": "Support"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Sivir",
+          "role": "Bot"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Wukong"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Akali"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Trundle"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Xin Zhao",
+          "role": "Jungle"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "K'Sante",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Pantheon",
+          "role": "Jungle"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Annie",
+          "role": "Mid"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Bilibili Gaming",
+      "team2": "Team WE",
+      "score": "1 - 0",
+      "winner": "Bilibili Gaming",
+      "patch": "26.10",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Rumble"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ezreal"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Seraphine",
+          "role": "Support"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Jarvan IV",
+          "role": "Jungle"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ryze",
+          "role": "Mid"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Sion",
+          "role": "Top"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ashe",
+          "role": "Bot"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Shen",
+          "role": "Top"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Vi"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nautilus"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Karma",
+          "role": "Support"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ahri",
+          "role": "Mid"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lee Sin",
+          "role": "Jungle"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Jhin",
+          "role": "Bot"
+        }
+      ]
+    },
+    {
       "phase": "Round 4",
       "team1": "Top Esports",
       "team2": "Team WE",
@@ -93535,6 +95495,1686 @@
   ],
   "LCK 2026 Road to MSI": [
     {
+      "phase": "Round 4",
+      "team1": "T1",
+      "team2": "Gen.G",
+      "score": "3 - 2",
+      "winner": "T1",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Yone"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Bard"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ryze",
+          "role": "Mid"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Nidalee",
+          "role": "Jungle"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Renekton",
+          "role": "Top"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Naafiri",
+          "role": "Jungle"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Gragas",
+          "role": "Top"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Twisted Fate",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ashe"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Blitzcrank"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Thresh"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nautilus"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Miss Fortune",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Sivir",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Neeko",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Rell",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Gen.G",
+      "team2": "T1",
+      "score": "2 - 2",
+      "winner": "Gen.G",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Varus"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Jarvan IV"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ryze"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Karma",
+          "role": "Support"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Gnar",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Nocturne",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Xin Zhao",
+          "role": "Jungle"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ezreal",
+          "role": "Bot"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Lissandra",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Sylas"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Sivir"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Twisted Fate"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Neeko"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Yunara",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Gangplank",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ahri",
+          "role": "Mid"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Lulu",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Gen.G",
+      "team2": "T1",
+      "score": "1 - 2",
+      "winner": "T1",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ryze"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Karma"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Varus"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Annie",
+          "role": "Mid"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Wukong",
+          "role": "Jungle"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Senna",
+          "role": "Bot"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jayce",
+          "role": "Jungle"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Mel",
+          "role": "Bot"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Sion",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Pyke"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Viktor"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nautilus"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lissandra"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Alistar",
+          "role": "Support"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Zaahen",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Poppy",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Olaf",
+          "role": "Top"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Gen.G",
+      "team2": "T1",
+      "score": "1 - 1",
+      "winner": "T1",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ryze"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Karma"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Sion"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Anivia",
+          "role": "Mid"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Vi",
+          "role": "Jungle"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Rumble",
+          "role": "Top"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Xayah",
+          "role": "Bot"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rakan",
+          "role": "Support"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Akali",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Wukong"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Ashe"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Kalista",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Maokai",
+          "role": "Jungle"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Yorick",
+          "role": "Top"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Renata Glasc",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 4",
+      "team1": "Gen.G",
+      "team2": "T1",
+      "score": "1 - 0",
+      "winner": "Gen.G",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Karma"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Vi"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Jayce"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lee Sin",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Cassiopeia",
+          "role": "Mid"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Trundle",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ambessa",
+          "role": "Top"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Galio",
+          "role": "Mid"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Vayne",
+          "role": "Top"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Rakan"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Poppy"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ashe"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ziggs",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jhin",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Camille",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Shen",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "KT Rolster",
+      "team2": "Gen.G",
+      "score": "0 - 3",
+      "winner": "Gen.G",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Vayne"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ashe"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jarvan IV",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Gnar",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Naafiri",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Yunara",
+          "role": "Bot"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lulu",
+          "role": "Support"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Lissandra",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Aurora"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Zoe"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lucian"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Xayah",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Renekton",
+          "role": "Top"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Viktor",
+          "role": "Mid"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Rakan",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "Gen.G",
+      "team2": "KT Rolster",
+      "score": "2 - 0",
+      "winner": "Gen.G",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Jarvan IV"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Bard"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Annie",
+          "role": "Mid"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Rumble",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Vi",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Wukong",
+          "role": "Jungle"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ambessa",
+          "role": "Top"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Taliyah",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ashe"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Lulu"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Xayah"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Poppy"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Jhin",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Senna",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Nautilus",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Rell",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "KT Rolster",
+      "team2": "Gen.G",
+      "score": "0 - 1",
+      "winner": "Gen.G",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Anivia"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Jarvan IV"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ryze",
+          "role": "Mid"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ezreal",
+          "role": "Bot"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Karma",
+          "role": "Support"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jayce",
+          "role": "Top"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ziggs",
+          "role": "Bot"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Sion",
+          "role": "Top"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Trundle"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Vi"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nautilus"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Ahri"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Mel",
+          "role": "Mid"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Camille",
+          "role": "Support"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lee Sin",
+          "role": "Jungle"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Xin Zhao",
+          "role": "Jungle"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "T1",
+      "team2": "Hanwha Life Esports",
+      "score": "1 - 3",
+      "winner": "Hanwha Life Esports",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Bard"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Akali"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Aurora"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Annie"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rumble",
+          "role": "Top"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Yone",
+          "role": "Mid"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "K'Sante",
+          "role": "Top"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Azir",
+          "role": "Mid"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Poppy",
+          "role": "Jungle"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Maokai",
+          "role": "Jungle"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Ashe"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Xin Zhao"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Mel"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Senna",
+          "role": "Bot"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Aphelios",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Thresh",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Blitzcrank",
+          "role": "Support"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "Hanwha Life Esports",
+      "team2": "T1",
+      "score": "2 - 1",
+      "winner": "Hanwha Life Esports",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Rumble"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Vayne"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lee Sin",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Naafiri",
+          "role": "Jungle"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Renekton",
+          "role": "Top"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Cassiopeia",
+          "role": "Mid"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Shen",
+          "role": "Top"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Galio",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Senna"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Mel"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nautilus"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Milio",
+          "role": "Support"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Kog'Maw",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Lulu",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Lucian",
+          "role": "Bot"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "Hanwha Life Esports",
+      "team2": "T1",
+      "score": "1 - 1",
+      "winner": "T1",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Bard"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Rumble"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Vayne"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Gnar"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Vi",
+          "role": "Jungle"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ambessa",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Nocturne",
+          "role": "Jungle"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Rek'Sai",
+          "role": "Top"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ahri",
+          "role": "Mid"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Lissandra",
+          "role": "Mid"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Ashe"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Caitlyn"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Lulu"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Poppy"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Rakan",
+          "role": "Support"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Xayah",
+          "role": "Bot"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Renata Glasc",
+          "role": "Support"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Sivir",
+          "role": "Bot"
+        }
+      ]
+    },
+    {
+      "phase": "Round 3",
+      "team1": "T1",
+      "team2": "Hanwha Life Esports",
+      "score": "0 - 1",
+      "winner": "Hanwha Life Esports",
+      "patch": "26.11",
+      "draft": [
+        {
+          "slot": 1,
+          "action": "ban",
+          "team": 1,
+          "champion": "Varus"
+        },
+        {
+          "slot": 2,
+          "action": "ban",
+          "team": 2,
+          "champion": "Orianna"
+        },
+        {
+          "slot": 3,
+          "action": "ban",
+          "team": 1,
+          "champion": "Nautilus"
+        },
+        {
+          "slot": 4,
+          "action": "ban",
+          "team": 2,
+          "champion": "Bard"
+        },
+        {
+          "slot": 5,
+          "action": "ban",
+          "team": 1,
+          "champion": "Yone"
+        },
+        {
+          "slot": 6,
+          "action": "ban",
+          "team": 2,
+          "champion": "Cassiopeia"
+        },
+        {
+          "slot": 7,
+          "action": "pick",
+          "team": 1,
+          "champion": "Karma",
+          "role": "Support"
+        },
+        {
+          "slot": 8,
+          "action": "pick",
+          "team": 2,
+          "champion": "Jayce",
+          "role": "Top"
+        },
+        {
+          "slot": 9,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ryze",
+          "role": "Mid"
+        },
+        {
+          "slot": 10,
+          "action": "pick",
+          "team": 1,
+          "champion": "Ezreal",
+          "role": "Bot"
+        },
+        {
+          "slot": 11,
+          "action": "pick",
+          "team": 1,
+          "champion": "Sion",
+          "role": "Top"
+        },
+        {
+          "slot": 12,
+          "action": "pick",
+          "team": 2,
+          "champion": "Ziggs",
+          "role": "Bot"
+        },
+        {
+          "slot": 13,
+          "action": "ban",
+          "team": 2,
+          "champion": "Nocturne"
+        },
+        {
+          "slot": 14,
+          "action": "ban",
+          "team": 1,
+          "champion": "Vi"
+        },
+        {
+          "slot": 15,
+          "action": "ban",
+          "team": 2,
+          "champion": "Lee Sin"
+        },
+        {
+          "slot": 16,
+          "action": "ban",
+          "team": 1,
+          "champion": "Naafiri"
+        },
+        {
+          "slot": 17,
+          "action": "pick",
+          "team": 2,
+          "champion": "Camille",
+          "role": "Support"
+        },
+        {
+          "slot": 18,
+          "action": "pick",
+          "team": 1,
+          "champion": "Anivia",
+          "role": "Mid"
+        },
+        {
+          "slot": 19,
+          "action": "pick",
+          "team": 1,
+          "champion": "Jarvan IV",
+          "role": "Jungle"
+        },
+        {
+          "slot": 20,
+          "action": "pick",
+          "team": 2,
+          "champion": "Trundle",
+          "role": "Jungle"
+        }
+      ]
+    },
+    {
       "phase": "Round 2",
       "team1": "Dplus Kia",
       "team2": "KT Rolster",
@@ -94098,8 +97738,8 @@
       "phase": "Round 2",
       "team1": "Dplus Kia",
       "team2": "KT Rolster",
-      "score": "0 - 1",
-      "winner": "KT Rolster",
+      "score": "1 - 0",
+      "winner": "Dplus Kia",
       "patch": "26.11",
       "draft": [
         {
