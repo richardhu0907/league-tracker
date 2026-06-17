@@ -422,6 +422,7 @@ export function PrioPicksTab() {
 
   const counts = new Map<string, number>();
   const comboCounts = new Map<string, { a: string; b: string; count: number }>();
+  const b23Counts  = new Map<string, { a: string; b: string; count: number }>();
 
   for (const game of filtered) {
     const slot7 = game.draft.find(d => d.slot === 7)?.champion;
@@ -435,10 +436,20 @@ export function PrioPicksTab() {
       if (!comboCounts.has(key)) comboCounts.set(key, { a, b, count: 0 });
       comboCounts.get(key)!.count++;
     }
+
+    const slot10 = game.draft.find(d => d.slot === 10)?.champion;
+    const slot11 = game.draft.find(d => d.slot === 11)?.champion;
+    if (slot10 && slot11) {
+      const [a, b] = [slot10, slot11].sort();
+      const key = `${a}|||${b}`;
+      if (!b23Counts.has(key)) b23Counts.set(key, { a, b, count: 0 });
+      b23Counts.get(key)!.count++;
+    }
   }
 
   const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]);
   const combos = [...comboCounts.values()].filter(c => c.count >= 3).sort((a, b) => b.count - a.count);
+  const b23combos = [...b23Counts.values()].filter(c => c.count >= 3).sort((a, b) => b.count - a.count);
 
   const [selectedB1, setSelectedB1] = useState<string | null>(null);
 
@@ -532,6 +543,258 @@ export function PrioPicksTab() {
                 ))}
               </div>
             </div>
+
+            <div>
+              <div className="pp-section-label">B2/B3</div>
+              <div className="pp-list">
+                {b23combos.map(({ a, b, count }, i) => (
+                  <div key={`${a}|||${b}`} className="pp-row">
+                    <span className="pp-rank">{i + 1}</span>
+                    <ChampIcon name={a} size={36} />
+                    <ChampIcon name={b} size={36} />
+                    <span className="pp-count">{count}×</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+      )}
+    </div>
+  );
+}
+
+export function CombosTab() {
+  const { selected, toggle, activePages } = useSelectedTournaments();
+  const [games, setGames] = useState<ProGame[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [selectedPatches, setSelectedPatches] = useState<string[]>(['all']);
+  const [comboType, setComboType] = useState<'Mid/Jg' | 'Bot/Sup' | 'Jg/Sup'>('Mid/Jg');
+
+  useEffect(() => {
+    setLoading(true);
+    setError('');
+    setGames([]);
+    Promise.all(activePages.map(page =>
+      axios.get<ProGame[]>(`${BASE}/games`, { params: { page } }).then(r => r.data)
+    ))
+      .then(results => setGames(results.flat()))
+      .catch(err => setError(err.response?.data?.error ?? 'Failed to load matches'))
+      .finally(() => setLoading(false));
+  }, [activePages.join(',')]);
+
+  const availablePatches = Array.from(new Set(games.map(g => g.patch))).sort().reverse();
+  const patches = ['all', ...availablePatches];
+
+  useEffect(() => {
+    if (selectedPatches.includes('all')) return;
+    const available = new Set(availablePatches);
+    const stillValid = selectedPatches.filter(p => available.has(p));
+    if (stillValid.length === 0) setSelectedPatches(['all']);
+    else if (stillValid.length !== selectedPatches.length) setSelectedPatches(stillValid);
+  }, [availablePatches.join(',')]);
+
+  const filtered = selectedPatches.includes('all') ? games : games.filter(g => selectedPatches.includes(g.patch));
+
+  const COMBO_ROLES: Record<'Mid/Jg' | 'Bot/Sup' | 'Jg/Sup', [string, string]> = {
+    'Mid/Jg':  ['Mid', 'Jungle'],
+    'Bot/Sup': ['Bot', 'Support'],
+    'Jg/Sup':  ['Jungle', 'Support'],
+  };
+
+  const [roleA, roleB] = COMBO_ROLES[comboType];
+  const comboCounts = new Map<string, { a: string; b: string; count: number }>();
+
+  for (const game of filtered) {
+    for (const teamNum of [1, 2] as const) {
+      const teamPicks = game.draft.filter(d => d.action === 'pick' && d.team === teamNum);
+      const byRole = new Map<string, string>();
+      for (const p of teamPicks) {
+        if (p.role) byRole.set(p.role, p.champion);
+      }
+      const champA = byRole.get(roleA);
+      const champB = byRole.get(roleB);
+      if (champA && champB) {
+        const [a, b] = [champA, champB].sort();
+        const key = `${a}|||${b}`;
+        if (!comboCounts.has(key)) comboCounts.set(key, { a, b, count: 0 });
+        comboCounts.get(key)!.count++;
+      }
+    }
+  }
+
+  const combos = [...comboCounts.values()].sort((a, b) => b.count - a.count);
+
+  return (
+    <div className="pm-container">
+      <div className="pp-filters">
+        <TournamentDropdown selected={selected} onToggle={toggle} />
+        <PatchDropdown patches={patches} selected={selectedPatches} onChange={setSelectedPatches} />
+        <div className="pp-type-tabs">
+          {(['Mid/Jg', 'Bot/Sup', 'Jg/Sup'] as const).map(type => (
+            <button
+              key={type}
+              className={`pp-type-tab${comboType === type ? ' active' : ''}`}
+              onClick={() => setComboType(type)}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {loading && <div className="loading">Loading...</div>}
+      {error && <div className="error-msg">{error}</div>}
+
+      {!loading && !error && (
+        <div className="pp-list">
+          {combos.length === 0
+            ? <div className="loading">No combos found.</div>
+            : combos.map(({ a, b, count }, i) => (
+              <div key={`${a}|||${b}`} className="pp-row">
+                <span className="pp-rank">{i + 1}</span>
+                <ChampIcon name={a} size={36} />
+                <span className="pp-name">{a}</span>
+                <span className="pp-combo-sep">+</span>
+                <ChampIcon name={b} size={36} />
+                <span className="pp-name">{b}</span>
+                <span className="pp-count">{count}×</span>
+              </div>
+            ))
+          }
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function CounterPicksTab() {
+  const { selected, toggle, activePages } = useSelectedTournaments();
+  const [games, setGames] = useState<ProGame[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [selectedPatches, setSelectedPatches] = useState<string[]>(['all']);
+  const [selectedChamp, setSelectedChamp] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setError('');
+    setGames([]);
+    Promise.all(activePages.map(page =>
+      axios.get<ProGame[]>(`${BASE}/games`, { params: { page } }).then(r => r.data)
+    ))
+      .then(results => setGames(results.flat()))
+      .catch(err => setError(err.response?.data?.error ?? 'Failed to load matches'))
+      .finally(() => setLoading(false));
+  }, [activePages.join(',')]);
+
+  const availablePatches = Array.from(new Set(games.map(g => g.patch))).sort().reverse();
+  const patches = ['all', ...availablePatches];
+
+  useEffect(() => {
+    if (selectedPatches.includes('all')) return;
+    const available = new Set(availablePatches);
+    const stillValid = selectedPatches.filter(p => available.has(p));
+    if (stillValid.length === 0) setSelectedPatches(['all']);
+    else if (stillValid.length !== selectedPatches.length) setSelectedPatches(stillValid);
+  }, [availablePatches.join(',')]);
+
+  const filtered = selectedPatches.includes('all') ? games : games.filter(g => selectedPatches.includes(g.patch));
+
+  const blindCounts = new Map<string, number>();
+  for (const game of filtered) {
+    const picks = game.draft.filter(d => d.action === 'pick' && d.role);
+    const byRole = new Map<string, DraftSlot[]>();
+    for (const p of picks) {
+      if (!byRole.has(p.role!)) byRole.set(p.role!, []);
+      byRole.get(p.role!)!.push(p);
+    }
+    for (const rolePicks of byRole.values()) {
+      if (rolePicks.length < 2) continue;
+      rolePicks.sort((a, b) => a.slot - b.slot);
+      blindCounts.set(rolePicks[0].champion, (blindCounts.get(rolePicks[0].champion) ?? 0) + 1);
+    }
+  }
+
+  const sortedBlinds = [...blindCounts.entries()].sort((a, b) => b[1] - a[1]);
+
+  const countersByRole = (() => {
+    if (!selectedChamp) return [];
+    const roleMap = new Map<string, Map<string, number>>();
+    for (const game of filtered) {
+      const picks = game.draft.filter(d => d.action === 'pick' && d.role);
+      const byRole = new Map<string, DraftSlot[]>();
+      for (const p of picks) {
+        if (!byRole.has(p.role!)) byRole.set(p.role!, []);
+        byRole.get(p.role!)!.push(p);
+      }
+      for (const [role, rolePicks] of byRole) {
+        if (rolePicks.length < 2) continue;
+        rolePicks.sort((a, b) => a.slot - b.slot);
+        if (rolePicks[0].champion !== selectedChamp) continue;
+        const counter = rolePicks[1].champion;
+        if (!roleMap.has(role)) roleMap.set(role, new Map());
+        const m = roleMap.get(role)!;
+        m.set(counter, (m.get(counter) ?? 0) + 1);
+      }
+    }
+    return [...roleMap.entries()]
+      .map(([role, counts]) => ({
+        role,
+        counters: [...counts.entries()]
+          .map(([champ, count]) => ({ champ, count }))
+          .sort((a, b) => b.count - a.count),
+      }))
+      .sort((a, b) =>
+        b.counters.reduce((s, x) => s + x.count, 0) -
+        a.counters.reduce((s, x) => s + x.count, 0)
+      );
+  })();
+
+  return (
+    <div className="pm-container">
+      <div className="pp-filters">
+        <TournamentDropdown selected={selected} onToggle={toggle} />
+        <PatchDropdown patches={patches} selected={selectedPatches} onChange={setSelectedPatches} />
+      </div>
+
+      {loading && <div className="loading">Loading...</div>}
+      {error && <div className="error-msg">{error}</div>}
+
+      {!loading && !error && sortedBlinds.length > 0 && (
+        selectedChamp ? (
+          <div>
+            <button className="pp-back-btn" onClick={() => setSelectedChamp(null)}>← Back</button>
+            <div className="pp-detail-header">
+              <ChampIcon name={selectedChamp} size={48} />
+              <div className="pp-detail-name">{selectedChamp}</div>
+            </div>
+            {countersByRole.map(({ role, counters }) => (
+              <div key={role} className="pp-answers-section">
+                <div className="pp-section-label">{selectedChamp} {role} — countered by</div>
+                <div className="pp-answers-grid">
+                  {counters.map(({ champ, count }) => (
+                    <div key={champ} className="pp-answer-card">
+                      <ChampIcon name={champ} size={52} />
+                      <span className="pp-answer-name">{champ}</span>
+                      <span className="pp-answer-count">{count}×</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="pp-list">
+            {sortedBlinds.map(([champ, count], i) => (
+              <div key={champ} className="pp-row pp-row-clickable" onClick={() => setSelectedChamp(champ)}>
+                <span className="pp-rank">{i + 1}</span>
+                <ChampIcon name={champ} size={36} />
+                <span className="pp-name">{champ}</span>
+                <span className="pp-count">{count}×</span>
+              </div>
+            ))}
           </div>
         )
       )}

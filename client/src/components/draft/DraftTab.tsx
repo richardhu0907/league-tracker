@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { ChampionData, DraftAction, DraftState } from '../../types';
 import ChampionGrid from './ChampionGrid';
 import CounterPanel from './CounterPanel';
+import { champId } from '../../utils/champId';
 
 const DRAFT_ORDER: DraftAction[] = [
   // Ban Phase 1 — Blue first, alternating
@@ -97,9 +98,9 @@ function PickCol({ picks, activeSlot, editingSlot, team, version, champMap, onSl
                 <img
                   src={`https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${id}.png`}
                   alt={id}
-                  className="pick-icon"
+                  className="pick-splash"
                 />
-                <span className="pick-name">{champMap.get(id) ?? id}</span>
+                <span className="pick-splash-name">{champMap.get(id) ?? id}</span>
               </>
             ) : (
               <span className="pick-empty">{isActive ? (team === 'blue' ? '← Pick' : 'Pick →') : ''}</span>
@@ -116,6 +117,11 @@ export default function DraftTab() {
   const [champMap, setChampMap] = useState<Map<string, string>>(new Map());
   const [version, setVersion] = useState('14.24.1');
   const [loading, setLoading] = useState(true);
+
+  const [rawGames,       setRawGames]       = useState<{ patch: string; draft: { slot: number; champion: string; team?: number; role?: string }[] }[]>([]);
+  const [selectedPatches, setSelectedPatches] = useState<string[]>(['all']);
+  const patchFilterRef = useRef<HTMLDivElement>(null);
+  const [patchOpen, setPatchOpen] = useState(false);
 
   const [currentGame, setCurrentGame] = useState(0);
   const [gameDrafts, setGameDrafts] = useState<DraftState[]>(() => Array.from({ length: NUM_GAMES }, emptyDraft));
@@ -150,6 +156,105 @@ export default function DraftTab() {
       })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const BASE_PM = `${import.meta.env.VITE_API_URL ?? ''}/api/promatches`;
+    const PAGES = [
+      'LCS 2026 Spring', 'LCS 2026 Spring Playoffs',
+      'LEC 2026 Spring', 'LEC 2026 Spring Playoffs',
+      'LPL 2026 Split 2', 'LPL 2026 Split 2 Playoffs',
+      'LCK 2026 Rounds 1-2', 'LCK 2026 Road to MSI',
+    ];
+    Promise.all(PAGES.map(page =>
+      fetch(`${BASE_PM}/games?page=${encodeURIComponent(page)}`).then(r => r.json())
+    ))
+      .then((results: { patch: string; draft: { slot: number; champion: string; team?: number; role?: string }[] }[][]) => {
+        setRawGames(results.flat());
+      })
+      .catch(() => {});
+  }, []);
+
+  // Close patch dropdown on outside click
+  useEffect(() => {
+    function onMouseDown(e: MouseEvent) {
+      if (patchFilterRef.current && !patchFilterRef.current.contains(e.target as Node))
+        setPatchOpen(false);
+    }
+    if (patchOpen) document.addEventListener('mousedown', onMouseDown);
+    return () => document.removeEventListener('mousedown', onMouseDown);
+  }, [patchOpen]);
+
+  const availablePatches = useMemo(
+    () => Array.from(new Set(rawGames.map(g => g.patch).filter(Boolean))).sort().reverse(),
+    [rawGames]
+  );
+
+  const filteredGames = useMemo(
+    () => selectedPatches.includes('all') ? rawGames : rawGames.filter(g => selectedPatches.includes(g.patch)),
+    [rawGames, selectedPatches]
+  );
+
+  const b1Picks = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const game of filteredGames) {
+      const b1 = game.draft.find(d => d.slot === 7);
+      if (b1?.champion) { const id = champId(b1.champion); if (id) counts.set(id, (counts.get(id) ?? 0) + 1); }
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 20).map(([id, count]) => ({ id, count }));
+  }, [filteredGames]);
+
+  const r12Combos = useMemo(() => {
+    const r12 = new Map<string, { a: string; b: string; count: number }>();
+    for (const game of filteredGames) {
+      const ia = champId(game.draft.find(d => d.slot === 8)?.champion ?? '');
+      const ib = champId(game.draft.find(d => d.slot === 9)?.champion ?? '');
+      if (ia && ib) {
+        const key = [...[ia, ib]].sort().join('|||');
+        if (!r12.has(key)) r12.set(key, { a: ia, b: ib, count: 0 });
+        r12.get(key)!.count++;
+      }
+    }
+    return [...r12.values()].sort((a, b) => b.count - a.count).slice(0, 15);
+  }, [filteredGames]);
+
+  const proCounters = useMemo(() => {
+    if (!autoChamp) return [];
+    const targetId = autoChamp.id;
+    const countMap = new Map<string, number>();
+    for (const game of filteredGames) {
+      const picks = game.draft.filter(d => d.slot >= 7);
+      const champPick = picks.find(d => champId(d.champion) === targetId && d.role && d.team != null);
+      if (!champPick) continue;
+      // Only count picks made AFTER this champion (true counter picks, not blind picks)
+      const opposing = picks.find(d =>
+        d.team !== champPick.team &&
+        d.role === champPick.role &&
+        d.slot > champPick.slot
+      );
+      if (opposing?.champion) {
+        const id = champId(opposing.champion);
+        if (id) countMap.set(id, (countMap.get(id) ?? 0) + 1);
+      }
+    }
+    return [...countMap.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([id, count]) => ({ id, count }));
+  }, [autoChamp, filteredGames]);
+
+  const b23Combos = useMemo(() => {
+    const b23 = new Map<string, { a: string; b: string; count: number }>();
+    for (const game of filteredGames) {
+      const ia = champId(game.draft.find(d => d.slot === 10)?.champion ?? '');
+      const ib = champId(game.draft.find(d => d.slot === 11)?.champion ?? '');
+      if (ia && ib) {
+        const key = [...[ia, ib]].sort().join('|||');
+        if (!b23.has(key)) b23.set(key, { a: ia, b: ib, count: 0 });
+        b23.get(key)!.count++;
+      }
+    }
+    return [...b23.values()].sort((a, b) => b.count - a.count).slice(0, 15);
+  }, [filteredGames]);
 
   const draft = gameDrafts[currentGame];
   const step  = gameSteps[currentGame];
@@ -186,12 +291,14 @@ export default function DraftTab() {
         : (editingSlot.team === 'blue' ? draft.bluePicks : draft.redPicks)[editingSlot.slot])
     : null;
 
-  const usedChampions = new Set<string>([
+  const allUsedChampions = new Set<string>([
     ...draft.blueBans.filter((c): c is string => c !== null),
     ...draft.redBans.filter((c): c is string => c !== null),
     ...draft.bluePicks.filter((c): c is string => c !== null),
     ...draft.redPicks.filter((c): c is string => c !== null),
   ]);
+  // usedChampions removes the editing champ so the grid shows it as available for swap
+  const usedChampions = new Set(allUsedChampions);
   if (editingChamp) usedChampions.delete(editingChamp);
 
   const handleSlotClick = (team: 'blue' | 'red', type: 'ban' | 'pick', slot: number) => {
@@ -248,6 +355,36 @@ export default function DraftTab() {
     setAutoAction(current.type);
   };
 
+  const handleDuoPick = (idA: string, idB: string) => {
+    if (isDone || !current) return;
+    if (current.team !== 'red' || current.type !== 'pick' || current.slot !== 0) return;
+    const nextStep = DRAFT_ORDER[step + 1];
+    if (!nextStep || nextStep.team !== 'red' || nextStep.type !== 'pick' || nextStep.slot !== 1) return;
+    if (usedChampions.has(idA) || usedChampions.has(idB) || idA === idB) return;
+    if (eliminatedChamps.has(idA) || eliminatedChamps.has(idB)) return;
+    updateDraft(prev => ({
+      ...prev,
+      redPicks: [idA, idB, prev.redPicks[2], prev.redPicks[3], prev.redPicks[4]],
+    }));
+    updateStep(s => s + 2);
+    setAutoChamp(null);
+  };
+
+  const handleB23Pick = (idA: string, idB: string) => {
+    if (isDone || !current) return;
+    if (current.team !== 'blue' || current.type !== 'pick' || current.slot !== 1) return;
+    const nextStep = DRAFT_ORDER[step + 1];
+    if (!nextStep || nextStep.team !== 'blue' || nextStep.type !== 'pick' || nextStep.slot !== 2) return;
+    if (usedChampions.has(idA) || usedChampions.has(idB) || idA === idB) return;
+    if (eliminatedChamps.has(idA) || eliminatedChamps.has(idB)) return;
+    updateDraft(prev => ({
+      ...prev,
+      bluePicks: [prev.bluePicks[0], idA, idB, prev.bluePicks[3], prev.bluePicks[4]],
+    }));
+    updateStep(s => s + 2);
+    setAutoChamp(null);
+  };
+
   const handleUndo = () => {
     if (step === 0) return;
     const prev = DRAFT_ORDER[step - 1];
@@ -293,6 +430,28 @@ export default function DraftTab() {
   const activeBluePick = current?.team === 'blue' && current.type === 'pick' ? current.slot : -1;
   const activeRedPick  = current?.team === 'red'  && current.type === 'pick' ? current.slot : -1;
 
+  const b1Suggestions = activeBluePick === 0
+    ? b1Picks.filter(({ id }) => !allUsedChampions.has(id) && !eliminatedChamps.has(id)).slice(0, 5)
+    : [];
+
+  const r12Suggestions = activeRedPick === 0
+    ? r12Combos
+        .filter(({ a, b }) =>
+          !allUsedChampions.has(a) && !allUsedChampions.has(b) &&
+          !eliminatedChamps.has(a) && !eliminatedChamps.has(b)
+        )
+        .slice(0, 5)
+    : [];
+
+  const b23Suggestions = activeBluePick === 1
+    ? b23Combos
+        .filter(({ a, b }) =>
+          !allUsedChampions.has(a) && !allUsedChampions.has(b) &&
+          !eliminatedChamps.has(a) && !eliminatedChamps.has(b)
+        )
+        .slice(0, 5)
+    : [];
+
   if (loading) return <div className="loading">Loading champions...</div>;
 
   return (
@@ -319,6 +478,31 @@ export default function DraftTab() {
             : `${current!.team === 'blue' ? 'Blue' : 'Red'} Side — ${current!.type === 'ban' ? 'Ban' : 'Pick'}`}
         </div>
         <div className="draft-controls">
+          {availablePatches.length > 0 && (
+            <div className="patch-filter" ref={patchFilterRef}>
+              <button className="draft-btn" onClick={() => setPatchOpen(o => !o)}>
+                {selectedPatches.includes('all') ? 'All Patches' : selectedPatches.length === 1 ? `P ${selectedPatches[0]}` : `${selectedPatches.length} Patches`} {patchOpen ? '▲' : '▼'}
+              </button>
+              {patchOpen && (
+                <div className="patch-filter-panel">
+                  <label className="patch-filter-item">
+                    <input type="checkbox" checked={selectedPatches.includes('all')} onChange={() => setSelectedPatches(['all'])} />
+                    <span>All Patches</span>
+                  </label>
+                  {availablePatches.map(p => (
+                    <label key={p} className="patch-filter-item">
+                      <input type="checkbox" checked={selectedPatches.includes(p)} onChange={() => {
+                        const without = selectedPatches.filter(v => v !== 'all');
+                        const next = without.includes(p) ? without.filter(v => v !== p) : [...without, p];
+                        setSelectedPatches(next.length === 0 ? ['all'] : next);
+                      }} />
+                      <span>Patch {p}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           <button onClick={() => setHidePicked(h => !h)} className="draft-btn">{hidePicked ? 'Show Picked' : 'Hide Picked'}</button>
           <button onClick={handleUndo} disabled={step === 0} className="draft-btn">Undo</button>
           <button onClick={handleReset} className="draft-btn reset">Reset All</button>
@@ -327,6 +511,31 @@ export default function DraftTab() {
 
       <div className="draft-body">
         <div className="draft-side blue-side">
+          {b1Suggestions.length > 0 && (
+            <div className="b1-hints-col">
+              <span className="b1-hints-label">B1 Prio</span>
+              {b1Suggestions.map(({ id, count }) => (
+                <div key={id} className="b1-hint" onClick={() => handleSelect(id)} title={champMap.get(id) ?? id}>
+                  <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${id}.png`} alt={id} />
+                  <span className="b1-hint-count">{count}×</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {b23Suggestions.length > 0 && (
+            <div className="b23-hints-col">
+              <span className="b1-hints-label">B2/B3 Prio</span>
+              {b23Suggestions.map(({ a, b, count }) => (
+                <div key={`${a}|||${b}`} className="r12-hint" onClick={() => handleB23Pick(a, b)}>
+                  <div className="r12-hint-icons">
+                    <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${a}.png`} alt={a} title={champMap.get(a) ?? a} />
+                    <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${b}.png`} alt={b} title={champMap.get(b) ?? b} />
+                  </div>
+                  <span className="b1-hint-count">{count}×</span>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="side-label blue-label">BLUE SIDE</div>
           <BanRow bans={draft.blueBans} activeSlot={activeBlueBan} editingSlot={editingSlot?.team === 'blue' && editingSlot.type === 'ban' ? editingSlot.slot : -1} version={v} onSlotClick={s => handleSlotClick('blue', 'ban', s)} />
           <PickCol picks={draft.bluePicks} activeSlot={activeBluePick} editingSlot={editingSlot?.team === 'blue' && editingSlot.type === 'pick' ? editingSlot.slot : -1} team="blue" version={v} champMap={champMap} onSlotClick={s => handleSlotClick('blue', 'pick', s)} />
@@ -355,10 +564,26 @@ export default function DraftTab() {
             autoAction={autoAction}
             onSelect={handleSelect}
             usedChampions={usedChampions}
+            proCounters={proCounters}
+            champMap={champMap}
           />
         </div>
 
         <div className="draft-side red-side">
+          {r12Suggestions.length > 0 && (
+            <div className="r12-hints-col">
+              <span className="b1-hints-label">R1/R2 Prio</span>
+              {r12Suggestions.map(({ a, b, count }) => (
+                <div key={`${a}|||${b}`} className="r12-hint" onClick={() => handleDuoPick(a, b)}>
+                  <div className="r12-hint-icons">
+                    <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${a}.png`} alt={a} title={champMap.get(a) ?? a} />
+                    <img src={`https://ddragon.leagueoflegends.com/cdn/${v}/img/champion/${b}.png`} alt={b} title={champMap.get(b) ?? b} />
+                  </div>
+                  <span className="b1-hint-count">{count}×</span>
+                </div>
+              ))}
+            </div>
+          )}
           <div className="side-label red-label">RED SIDE</div>
           <BanRow bans={draft.redBans} activeSlot={activeRedBan} editingSlot={editingSlot?.team === 'red' && editingSlot.type === 'ban' ? editingSlot.slot : -1} version={v} onSlotClick={s => handleSlotClick('red', 'ban', s)} />
           <PickCol picks={draft.redPicks} activeSlot={activeRedPick} editingSlot={editingSlot?.team === 'red' && editingSlot.type === 'pick' ? editingSlot.slot : -1} team="red" version={v} champMap={champMap} onSlotClick={s => handleSlotClick('red', 'pick', s)} />

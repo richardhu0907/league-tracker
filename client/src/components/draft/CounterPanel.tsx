@@ -15,9 +15,11 @@ interface Props {
   autoAction: 'pick' | 'ban';
   onSelect: (id: string) => void;
   usedChampions: Set<string>;
+  proCounters: { id: string; count: number }[];
+  champMap: Map<string, string>;
 }
 
-export default function CounterPanel({ champions, version, autoChamp, autoAction, onSelect, usedChampions }: Props) {
+export default function CounterPanel({ champions, version, autoChamp, autoAction, onSelect, usedChampions, proCounters, champMap }: Props) {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<ChampionData | null>(null);
   const [matchups, setMatchups] = useState<Matchup[]>([]);
@@ -101,41 +103,75 @@ export default function CounterPanel({ champions, version, autoChamp, autoAction
         </div>
       </div>
 
-      {loading && <div className="counter-status">Loading...</div>}
+      <div className="counter-body">
+        {autoAction === 'pick' && proCounters.length > 0 && (
+          <>
+            <div className="counter-section">
+              <div className="counter-pro-label">Pro Picks</div>
+              <div className="counter-list">
+                {proCounters.map(({ id, count }, i) => {
+                  const isUsed = usedChampions.has(id);
+                  return (
+                    <button
+                      key={id}
+                      className={`counter-row${isUsed ? ' used' : ''}`}
+                      onClick={() => onSelect(id)}
+                      disabled={isUsed}
+                    >
+                      <span className="counter-rank">{i + 1}</span>
+                      <img
+                        src={`https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${id}.png`}
+                        alt={id}
+                        className="counter-icon"
+                      />
+                      <span className="counter-name">{champMap.get(id) ?? id}</span>
+                      <span className="counter-games">{count} games</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="counter-divider" />
+          </>
+        )}
 
-      {!loading && matchups.length > 0 && (
-        <div className="counter-list">
-          {matchups.map((m, i) => {
-            const ddId = slugToId.get(m.opponentSlug);
-            const isUsed = ddId ? usedChampions.has(ddId) : false;
-            return (
-              <button
-                key={m.opponent}
-                className={`counter-row${isUsed ? ' used' : ''}`}
-                onClick={() => ddId && onSelect(ddId)}
-                disabled={!ddId || isUsed}
-              >
-                <span className="counter-rank">{i + 1}</span>
-                <img
-                  src={ddId
-                    ? `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ddId}.png`
-                    : `https://cdn5.lolalytics.com/champx46/${m.opponentSlug}.webp`}
-                  alt={m.opponent}
-                  className="counter-icon"
-                  onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                />
-                <span className="counter-name">{m.opponent}</span>
-                <span className="counter-wr">{m.winRate}%</span>
-                <span className="counter-games">{m.games.toLocaleString()} games</span>
-              </button>
-            );
-          })}
+        <div className="counter-section">
+          <div className="counter-pro-label">SoloQ Picks</div>
+          {loading && <div className="counter-status">Loading...</div>}
+          {!loading && matchups.length > 0 && (
+            <div className="counter-list">
+              {matchups.map((m, i) => {
+                const ddId = slugToId.get(m.opponentSlug);
+                const isUsed = ddId ? usedChampions.has(ddId) : false;
+                return (
+                  <button
+                    key={m.opponent}
+                    className={`counter-row${isUsed ? ' used' : ''}`}
+                    onClick={() => ddId && onSelect(ddId)}
+                    disabled={!ddId || isUsed}
+                  >
+                    <span className="counter-rank">{i + 1}</span>
+                    <img
+                      src={ddId
+                        ? `https://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ddId}.png`
+                        : `https://cdn5.lolalytics.com/champx46/${m.opponentSlug}.webp`}
+                      alt={m.opponent}
+                      className="counter-icon"
+                      onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    />
+                    <span className="counter-name">{m.opponent}</span>
+                    <span className="counter-wr">{m.winRate}%</span>
+                    <span className="counter-games">{m.games.toLocaleString()} games</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          {!loading && selected && matchups.length === 0 && (
+            <div className="counter-status">No counters found.</div>
+          )}
         </div>
-      )}
-
-      {!loading && selected && matchups.length === 0 && (
-        <div className="counter-status">No counters found with 1,000+ games.</div>
-      )}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getDDragonVersion } from '../api/riot';
-import ProMatchesTab, { PrioPicksTab } from './ProMatchesTab';
+import ProMatchesTab, { PrioPicksTab, CounterPicksTab, CombosTab } from './ProMatchesTab';
 
 const BASE = `${import.meta.env.VITE_API_URL ?? ''}/api/esports`;
 
@@ -163,7 +163,7 @@ function ChampionStatsView({ leagueId }: { leagueId: string }) {
   );
 }
 
-type EsportsView = 'results' | 'champstats' | 'drafts' | 'priopicks';
+type EsportsView = 'results' | 'champstats' | 'drafts' | 'priopicks' | 'counterpicks' | 'combos';
 
 export default function EsportsTab() {
   const [leagues, setLeagues] = useState<League[]>([]);
@@ -210,10 +210,16 @@ export default function EsportsTab() {
           Champion Stats
         </button>
         <button className={`es-view-tab ${view === 'drafts' ? 'active' : ''}`} onClick={() => setView('drafts')}>
-          Pro Drafts
+          Drafts
         </button>
         <button className={`es-view-tab ${view === 'priopicks' ? 'active' : ''}`} onClick={() => setView('priopicks')}>
           Prio Picks
+        </button>
+        <button className={`es-view-tab ${view === 'counterpicks' ? 'active' : ''}`} onClick={() => setView('counterpicks')}>
+          Counter Picks
+        </button>
+        <button className={`es-view-tab ${view === 'combos' ? 'active' : ''}`} onClick={() => setView('combos')}>
+          Combos
         </button>
       </div>
 
@@ -230,7 +236,11 @@ export default function EsportsTab() {
         </div>
       )}
 
-      {view === 'priopicks' ? (
+      {view === 'combos' ? (
+        <CombosTab />
+      ) : view === 'counterpicks' ? (
+        <CounterPicksTab />
+      ) : view === 'priopicks' ? (
         <PrioPicksTab />
       ) : view === 'drafts' ? (
         <ProMatchesTab />

@@ -507,6 +507,42 @@
   color: var(--text);
 }
 
+/* ── Combos tab type selector ─────────────────────── */
+.pp-type-tabs {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.pp-type-tab {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.pp-type-tab:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.pp-type-tab.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.pp-combo-sep {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 0 2px;
+}
+
 .pp-detail-header {
   display: flex;
   align-items: center;
