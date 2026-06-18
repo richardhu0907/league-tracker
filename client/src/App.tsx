@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1 className="logo">LoL Tracker</h1>
+        <h1 className="logo">🐍 SnakeDraft</h1>
       </header>
 
       <nav className="tabs">
