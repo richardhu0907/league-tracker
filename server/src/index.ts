@@ -9,7 +9,7 @@ import promatchesRouter from './routes/promatches';
 const app = express();
 const PORT = process.env.PORT ?? 3001;
 
-app.use(cors({ origin: ['http://localhost:5173', 'http://18.223.23.152'] }));
+app.use(cors({ origin: ['http://localhost:5173', 'http://18.223.23.152', 'https://snakedraft.win', 'https://www.snakedraft.win'] }));
 app.use(express.json());
 
 app.use('/api/esports', esportsRouter);
